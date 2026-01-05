@@ -1,3 +1,11 @@
+## 1.0.0
+
+First stable release.
+
+- Translated all documentation comments to English
+- Added 5 custom animation examples (Custom Path, Decoration Effects, Full Effects, Heart Burst, Game Rewards)
+- Removed empty directories
+
 ## 0.1.0
 
 Initial release with the following features:
