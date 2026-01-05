@@ -19,6 +19,12 @@ A Flutter package for animating multiple widgets flying to target positions simu
 |---|---|---|---|
 <video src = "https://github.com/user-attachments/assets/54166a12-f1c3-4957-8501-17644818091a">|<video src = "https://github.com/user-attachments/assets/534bea0c-39c0-43bc-bd69-c59dbd2e5f1c">|<video src = "https://github.com/user-attachments/assets/6b8b23df-3aee-438b-8271-6837553a2b35">|<video src = "https://github.com/user-attachments/assets/a072ed02-683d-4702-a2bf-5b783561d77a">
 
+### Any Customise is available
+
+|Custom Path|Custom Decoration Effects|Full Effects|Heart Burst|Game Rewards|
+|---|---|---|---|---|
+|<video src ="https://github.com/user-attachments/assets/32a20a69-f97e-4769-8fc7-16c9e4c3e338">|<video src ="https://github.com/user-attachments/assets/0bb400a9-d27f-410e-9e20-4f770b956faf">|<video src ="https://github.com/user-attachments/assets/d8d31e0b-01b3-45ea-8a5f-68c087faa7c5">|<video src ="https://github.com/user-attachments/assets/fc15f85b-4255-485c-a167-a129dc62b5b9">|<video src ="https://github.com/user-attachments/assets/c8349bbe-b762-4c3d-9e4c-3ceddcf77424">|
+
 ## Getting Started
 
 Add this to your `pubspec.yaml`:
