@@ -4,7 +4,7 @@ import '../models/fly_item.dart';
 import '../models/fly_animation_config.dart';
 import '../decorations/decoration_painter.dart';
 
-/// 飛行中のアイテムをアニメーションするウィジェット
+/// Widget for animating flying items
 class FlyingItemAnimation extends StatefulWidget {
   final FlyItem item;
   final Offset startPosition;
@@ -57,7 +57,7 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
       }
     });
 
-    // 遅延後にアニメーションを開始
+    // Start animation after delay
     if (widget.delay == Duration.zero) {
       _startAnimation();
     } else {
@@ -85,20 +85,20 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
       builder: (context, child) {
         final progress = _curvedAnimation.value;
 
-        // 位置を計算
+        // Calculate position
         final position = widget.config.pathConfig.calculatePosition(
           progress,
           widget.startPosition,
           widget.endPosition,
         );
 
-        // エフェクトを適用
+        // Apply effects
         final effects = widget.config.effects;
         final rotation = effects.rotation?.calculateRotation(progress) ?? 0.0;
         final scale = effects.scale?.calculateScale(progress) ?? 1.0;
         final opacity = effects.fade?.calculateOpacity(progress) ?? 1.0;
 
-        // 装飾を構築
+        // Build decorations
         final decorations = widget.config.decorations.map((config) {
           return DecorationPainterFactory.create(
             config: config,
@@ -110,12 +110,12 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
 
         return Stack(
           children: [
-            // 装飾（アイテムの後ろに描画するもの）
+            // Decorations (drawn behind item)
             ...decorations
                 .where((d) => !d.drawOnTop)
                 .map((d) => d.build(context)),
 
-            // メインアイテム
+            // Main item
             Positioned(
               left: position.dx - widget.itemSize.width / 2,
               top: position.dy - widget.itemSize.height / 2,
@@ -135,7 +135,7 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
               ),
             ),
 
-            // 装飾（アイテムの前に描画するもの）
+            // Decorations (drawn in front of item)
             ...decorations
                 .where((d) => d.drawOnTop)
                 .map((d) => d.build(context)),

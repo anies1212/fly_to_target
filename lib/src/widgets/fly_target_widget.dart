@@ -2,15 +2,15 @@ import 'package:flutter/widgets.dart';
 
 import '../models/fly_item.dart';
 
-/// 目的地を示すウィジェット（GlobalKeyを自動管理）
+/// Widget indicating a destination (automatically manages GlobalKey)
 class FlyTargetWidget extends StatefulWidget {
-  /// 子ウィジェット
+  /// Child widget
   final Widget child;
 
-  /// ターゲットのID
+  /// Target ID
   final String targetId;
 
-  /// コールバックで目的地を取得するための関数
+  /// Callback function to get destination
   final void Function(FlyTarget target)? onTargetReady;
 
   const FlyTargetWidget({
@@ -24,7 +24,7 @@ class FlyTargetWidget extends StatefulWidget {
   State<FlyTargetWidget> createState() => FlyTargetWidgetState();
 }
 
-/// FlyTargetWidgetの状態
+/// State for FlyTargetWidget
 class FlyTargetWidgetState extends State<FlyTargetWidget> {
   late final GlobalKey _key;
   late final FlyTarget _target;
@@ -40,7 +40,7 @@ class FlyTargetWidgetState extends State<FlyTargetWidget> {
     });
   }
 
-  /// このウィジェットのFlyTargetを取得
+  /// Get FlyTarget for this widget
   FlyTarget get target => _target;
 
   @override
@@ -52,8 +52,8 @@ class FlyTargetWidgetState extends State<FlyTargetWidget> {
   }
 }
 
-/// FlyTargetWidgetのGlobalKeyから目的地を取得するための拡張
+/// Extension to get destination from FlyTargetWidget's GlobalKey
 extension FlyTargetWidgetExtension on GlobalKey<FlyTargetWidgetState> {
-  /// FlyTargetを取得
+  /// Get FlyTarget
   FlyTarget? get target => currentState?.target;
 }

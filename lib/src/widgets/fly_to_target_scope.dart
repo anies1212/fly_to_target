@@ -2,12 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import '../core/fly_to_target_controller.dart';
 
-/// コントローラーを子孫に提供するスコープウィジェット
+/// Scope widget that provides controller to descendants
 class FlyToTargetScope extends StatefulWidget {
-  /// 子ウィジェット
+  /// Child widget
   final Widget child;
 
-  /// 外部から提供するコントローラー（省略時は内部で生成）
+  /// External controller (creates internal one if omitted)
   final FlyToTargetController? controller;
 
   const FlyToTargetScope({
@@ -16,7 +16,7 @@ class FlyToTargetScope extends StatefulWidget {
     this.controller,
   });
 
-  /// 最も近いFlyToTargetControllerを取得
+  /// Get the nearest FlyToTargetController
   static FlyToTargetController of(BuildContext context) {
     final scope =
         context.dependOnInheritedWidgetOfExactType<_FlyToTargetInherited>();
@@ -29,7 +29,7 @@ class FlyToTargetScope extends StatefulWidget {
     return scope.controller;
   }
 
-  /// nullを返すバージョン
+  /// Version that returns null
   static FlyToTargetController? maybeOf(BuildContext context) {
     final scope =
         context.dependOnInheritedWidgetOfExactType<_FlyToTargetInherited>();
@@ -64,7 +64,7 @@ class _FlyToTargetScopeState extends State<FlyToTargetScope>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // コントローラーをアタッチ（OverlayとTickerProviderを設定）
+    // Attach controller (set Overlay and TickerProvider)
     if (!_controller.isAttached) {
       _controller.attach(context, this);
     }

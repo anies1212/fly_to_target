@@ -4,16 +4,16 @@ import 'package:flutter/widgets.dart';
 
 import '../models/decoration_config.dart';
 
-/// 装飾を描画するための基底クラス
+/// Base class for painting decorations
 abstract class DecorationPainter {
-  /// アイテムの前に描画するかどうか
+  /// Whether to draw on top of the item
   bool get drawOnTop;
 
-  /// 装飾ウィジェットを構築
+  /// Build decoration widget
   Widget build(BuildContext context);
 }
 
-/// 装飾ペインターを生成するファクトリ
+/// Factory for creating decoration painters
 class DecorationPainterFactory {
   static DecorationPainter create({
     required DecorationConfig config,
@@ -49,7 +49,7 @@ class DecorationPainterFactory {
   }
 }
 
-/// 羽根エフェクトペインター
+/// Feather effect painter
 class FeatherPainter extends DecorationPainter {
   final FeatherDecorationConfig config;
   final double progress;
@@ -71,22 +71,22 @@ class FeatherPainter extends DecorationPainter {
     final feathers = <Widget>[];
 
     for (var i = 0; i < config.count; i++) {
-      // 各羽根の位相をずらす
+      // Offset phase for each feather
       final phase = i / config.count;
       final angle = (progress * 2 + phase) * pi * 2;
 
-      // 羽根の位置（メインアイテムの周りに散らばる）
+      // Feather position (scattered around main item)
       final spreadX = sin(angle + i) * config.spread * (1 - progress * 0.5);
       final spreadY =
           cos(angle + i * 0.7) * config.spread * (1 - progress * 0.5);
 
-      // 羽根の揺れ
+      // Feather flutter
       final flutter = sin(progress * pi * 4 + i) * config.flutter * 10;
 
-      // 羽根の透明度（後半で消えていく）
+      // Feather opacity (fades out in second half)
       final opacity = (1 - progress * 0.8).clamp(0.0, 1.0);
 
-      // 羽根の色を選択
+      // Select feather color
       final color = config.colors[i % config.colors.length];
 
       feathers.add(
@@ -127,7 +127,7 @@ class FeatherPainter extends DecorationPainter {
   }
 }
 
-/// パーティクルエフェクトペインター
+/// Particle effect painter
 class ParticlePainter extends DecorationPainter {
   final ParticleDecorationConfig config;
   final double progress;
@@ -150,7 +150,7 @@ class ParticlePainter extends DecorationPainter {
     final particles = <Widget>[];
 
     for (var i = 0; i < config.count; i++) {
-      // パーティクルの生成タイミングと寿命
+      // Particle spawn timing and lifetime
       final spawnProgress = i / config.count * 0.5;
       if (progress < spawnProgress) continue;
 
@@ -158,21 +158,21 @@ class ParticlePainter extends DecorationPainter {
           ((progress - spawnProgress) / config.lifetime).clamp(0.0, 1.0);
       if (particleProgress >= 1.0) continue;
 
-      // パーティクルのサイズ
+      // Particle size
       final baseSize = config.minSize +
           _random.nextDouble() * (config.maxSize - config.minSize);
       final size = baseSize * (1 - particleProgress * 0.5);
 
-      // パーティクルの位置（放出方向）
+      // Particle position (emission direction)
       final angle = _random.nextDouble() * pi * 2;
       final distance = particleProgress * 50 * config.speed;
       final offsetX = cos(angle) * distance;
       final offsetY = sin(angle) * distance - particleProgress * 30;
 
-      // 透明度
+      // Opacity
       final opacity = (1 - particleProgress).clamp(0.0, 1.0);
 
-      // 色を選択
+      // Select color
       final color = config.colors[i % config.colors.length];
 
       particles.add(
@@ -204,7 +204,7 @@ class ParticlePainter extends DecorationPainter {
   }
 }
 
-/// キラキラエフェクトペインター
+/// Sparkle effect painter
 class SparklePainter extends DecorationPainter {
   final SparkleDecorationConfig config;
   final double progress;
@@ -227,13 +227,13 @@ class SparklePainter extends DecorationPainter {
     final sparkles = <Widget>[];
 
     for (var i = 0; i < config.count; i++) {
-      // キラキラの位置
+      // Sparkle position
       final angle = (i / config.count) * pi * 2;
       final distance = itemSize.width * 0.8 + _random.nextDouble() * 10;
       final offsetX = cos(angle + progress * pi) * distance;
       final offsetY = sin(angle + progress * pi) * distance;
 
-      // 点滅効果
+      // Blink effect
       final blink = sin(progress * pi * config.blinkSpeed * 2 + i) * 0.5 + 0.5;
       final opacity =
           (blink * config.intensity * (1 - progress * 0.5)).clamp(0.0, 1.0);
@@ -257,7 +257,7 @@ class SparklePainter extends DecorationPainter {
   }
 }
 
-/// 星型を描画するカスタムペインター
+/// Custom painter for star shape
 class _StarShapePainter extends CustomPainter {
   final Color color;
 
@@ -299,7 +299,7 @@ class _StarShapePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// カスタム装飾ペインター
+/// Custom decoration painter
 class CustomDecorationPainter extends DecorationPainter {
   final CustomDecorationConfig config;
   final double progress;

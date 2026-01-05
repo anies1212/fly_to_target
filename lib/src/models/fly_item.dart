@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 
-/// 開始位置の指定方法
+/// Origin position specification
 sealed class FlyOrigin {
   const FlyOrigin();
 
-  /// GlobalKeyから位置を取得
+  /// Get position from GlobalKey
   Offset? resolvePosition() {
     return switch (this) {
       FlyOriginFromKey(:final key) => _getPositionFromKey(key),
@@ -18,7 +18,7 @@ sealed class FlyOrigin {
     return renderBox.localToGlobal(Offset.zero);
   }
 
-  /// GlobalKeyから位置とサイズを取得
+  /// Get position and size from GlobalKey
   (Offset?, Size?) resolvePositionAndSize() {
     return switch (this) {
       FlyOriginFromKey(:final key) => _getPositionAndSizeFromKey(key),
@@ -33,31 +33,31 @@ sealed class FlyOrigin {
   }
 }
 
-/// GlobalKeyから位置を取得
+/// Get position from GlobalKey
 class FlyOriginFromKey extends FlyOrigin {
   final GlobalKey key;
   const FlyOriginFromKey(this.key);
 }
 
-/// Offsetで直接位置を指定
+/// Specify position directly with Offset
 class FlyOriginFromOffset extends FlyOrigin {
   final Offset offset;
   final Size? size;
   const FlyOriginFromOffset(this.offset, {this.size});
 }
 
-/// 飛ばすアイテム
+/// Item to fly
 class FlyItem {
-  /// 表示するウィジェット
+  /// Widget to display
   final Widget child;
 
-  /// 開始位置
+  /// Start position
   final FlyOrigin origin;
 
-  /// アイテムのサイズ（nullの場合はchildから取得を試みる）
+  /// Item size (attempts to get from child if null)
   final Size? size;
 
-  /// 識別用ID（コールバックで使用）
+  /// ID for identification (used in callbacks)
   final String? id;
 
   const FlyItem({
@@ -67,7 +67,7 @@ class FlyItem {
     this.id,
   });
 
-  /// GlobalKeyから生成
+  /// Create from GlobalKey
   factory FlyItem.fromKey({
     required Widget child,
     required GlobalKey key,
@@ -80,7 +80,7 @@ class FlyItem {
     );
   }
 
-  /// Offsetから生成
+  /// Create from Offset
   factory FlyItem.fromOffset({
     required Widget child,
     required Offset offset,
@@ -95,14 +95,14 @@ class FlyItem {
     );
   }
 
-  /// 位置とサイズを解決
+  /// Resolve position and size
   (Offset?, Size?) resolvePositionAndSize() {
     final (position, originSize) = origin.resolvePositionAndSize();
     return (position, size ?? originSize);
   }
 }
 
-/// アイテムと個別の目的地を持つペア
+/// Pair of item and individual destination
 class FlyItemWithTarget {
   final FlyItem item;
   final FlyTarget target;
@@ -113,11 +113,11 @@ class FlyItemWithTarget {
   });
 }
 
-/// 目的地の定義
+/// Destination definition
 sealed class FlyTarget {
   const FlyTarget();
 
-  /// 目的地の位置を解決
+  /// Resolve destination position
   Offset? resolvePosition() {
     return switch (this) {
       FlyTargetFromKey(:final key) => _getPositionFromKey(key),
@@ -130,18 +130,18 @@ sealed class FlyTarget {
     if (renderBox == null) return null;
     final position = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
-    // 中心位置を返す
+    // Return center position
     return position + Offset(size.width / 2, size.height / 2);
   }
 }
 
-/// GlobalKeyから目的地を指定
+/// Specify destination from GlobalKey
 class FlyTargetFromKey extends FlyTarget {
   final GlobalKey key;
   const FlyTargetFromKey(this.key);
 }
 
-/// Offsetで目的地を直接指定
+/// Specify destination directly with Offset
 class FlyTargetFromOffset extends FlyTarget {
   final Offset offset;
   const FlyTargetFromOffset(this.offset);

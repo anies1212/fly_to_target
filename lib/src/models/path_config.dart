@@ -2,18 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
-/// 軌道設定の基底クラス
+/// Base class for path configuration
 sealed class PathConfig {
   const PathConfig();
 
-  /// 軌道上の位置を計算
-  /// [t] は 0.0 から 1.0 の進捗値
-  /// [start] は開始位置
-  /// [end] は終了位置
+  /// Calculate position on path
+  /// [t] is progress value from 0.0 to 1.0
+  /// [start] is start position
+  /// [end] is end position
   Offset calculatePosition(double t, Offset start, Offset end);
 }
 
-/// 直線軌道
+/// Linear path
 class LinearPathConfig extends PathConfig {
   const LinearPathConfig();
 
@@ -23,12 +23,12 @@ class LinearPathConfig extends PathConfig {
   }
 }
 
-/// 放物線軌道
+/// Parabolic path
 class ParabolicPathConfig extends PathConfig {
-  /// 放物線の高さ（負の値で上に膨らむ）
+  /// Parabola height (negative value curves upward)
   final double height;
 
-  /// 重力係数
+  /// Gravity coefficient
   final double gravity;
 
   const ParabolicPathConfig({
@@ -38,29 +38,29 @@ class ParabolicPathConfig extends PathConfig {
 
   @override
   Offset calculatePosition(double t, Offset start, Offset end) {
-    // 線形補間で基本位置を計算
+    // Calculate base position with linear interpolation
     final linearX = start.dx + (end.dx - start.dx) * t;
     final linearY = start.dy + (end.dy - start.dy) * t;
 
-    // 放物線のオフセット（頂点がt=0.5にくる）
+    // Parabolic offset (apex at t=0.5)
     final parabolicOffset = height * 4 * t * (1 - t) * gravity;
 
     return Offset(linearX, linearY + parabolicOffset);
   }
 }
 
-/// ベジェ曲線軌道
+/// Bezier curve path
 class BezierPathConfig extends PathConfig {
-  /// 制御点（相対座標）
+  /// Control points (relative coordinates)
   final List<Offset>? controlPoints;
 
-  /// 曲率（自動計算時に使用）
+  /// Curvature (used for auto calculation)
   final double curvature;
 
-  /// ランダム性（各アイテムで少しずつ異なる軌道にする）
+  /// Randomness (slightly different path for each item)
   final double randomness;
 
-  /// 乱数生成器のシード（再現性のため）
+  /// Random seed (for reproducibility)
   final int? seed;
 
   const BezierPathConfig({
@@ -70,7 +70,7 @@ class BezierPathConfig extends PathConfig {
     this.seed,
   });
 
-  /// 自動計算で制御点を生成
+  /// Auto-generate control points
   factory BezierPathConfig.auto({
     double curvature = 0.5,
     double randomness = 0.0,
@@ -85,12 +85,12 @@ class BezierPathConfig extends PathConfig {
 
   @override
   Offset calculatePosition(double t, Offset start, Offset end) {
-    // 制御点が指定されている場合
+    // If control points are specified
     if (controlPoints != null && controlPoints!.isNotEmpty) {
       return _calculateWithControlPoints(t, start, end, controlPoints!);
     }
 
-    // 自動計算で制御点を生成
+    // Auto-generate control points
     final random = seed != null ? Random(seed) : Random();
     final randomOffset = randomness > 0
         ? Offset(
@@ -99,16 +99,16 @@ class BezierPathConfig extends PathConfig {
           )
         : Offset.zero;
 
-    // 中間点を計算
+    // Calculate midpoint
     final midX = (start.dx + end.dx) / 2;
     final midY = (start.dy + end.dy) / 2;
 
-    // 曲線の方向を決定（開始点より上に膨らむ）
+    // Determine curve direction (curves upward from start)
     final dx = end.dx - start.dx;
     final dy = end.dy - start.dy;
     final distance = sqrt(dx * dx + dy * dy);
 
-    // 垂直方向のオフセット
+    // Perpendicular offset
     final perpX = -dy / distance * curvature * distance;
     final perpY = dx / distance * curvature * distance;
 
@@ -117,7 +117,7 @@ class BezierPathConfig extends PathConfig {
       midY + perpY - distance * curvature * 0.5 + randomOffset.dy,
     );
 
-    // 2次ベジェ曲線
+    // Quadratic bezier curve
     return _quadraticBezier(t, start, controlPoint, end);
   }
 
@@ -136,10 +136,10 @@ class BezierPathConfig extends PathConfig {
     List<Offset> controls,
   ) {
     if (controls.length == 1) {
-      // 2次ベジェ曲線
+      // Quadratic bezier curve
       return _quadraticBezier(t, start, controls[0], end);
     } else {
-      // 3次ベジェ曲線
+      // Cubic bezier curve
       return _cubicBezier(t, start, controls[0], controls[1], end);
     }
   }
@@ -164,7 +164,7 @@ class BezierPathConfig extends PathConfig {
   }
 }
 
-/// カスタム軌道
+/// Custom path
 class CustomPathConfig extends PathConfig {
   final Offset Function(double t, Offset start, Offset end) pathFunction;
 

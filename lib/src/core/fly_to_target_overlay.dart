@@ -6,7 +6,7 @@ import '../models/fly_item.dart';
 import '../models/fly_animation_config.dart';
 import '../animations/flying_item_animation.dart';
 
-/// アニメーション中のアイテムを管理するOverlayエントリ
+/// Overlay entry for managing animated items
 class FlyingOverlayEntry {
   final OverlayEntry overlayEntry;
   final String id;
@@ -19,17 +19,17 @@ class FlyingOverlayEntry {
   });
 }
 
-/// Overlay上でアニメーションを管理
+/// Manages animations on the Overlay
 class FlyToTargetOverlay {
   final List<FlyingOverlayEntry> _entries = [];
   OverlayState? _overlayState;
 
-  /// Overlayを初期化
+  /// Initialize the Overlay
   void attach(BuildContext context) {
     _overlayState = Overlay.of(context);
   }
 
-  /// アイテムを飛ばす
+  /// Fly an item
   Future<void> fly({
     required FlyItem item,
     required FlyTarget target,
@@ -48,7 +48,7 @@ class FlyToTargetOverlay {
     final completer = Completer<void>();
     final id = '${item.id ?? 'item'}_${DateTime.now().millisecondsSinceEpoch}';
 
-    // 開始位置と終了位置を解決
+    // Resolve start and end positions
     final (startPosition, itemSize) = item.resolvePositionAndSize();
     final endPosition = target.resolvePosition();
 
@@ -91,7 +91,7 @@ class FlyToTargetOverlay {
     return completer.future;
   }
 
-  /// 複数のアイテムを同時に飛ばす
+  /// Fly multiple items simultaneously
   Future<void> flyAll({
     required List<FlyItem> items,
     required FlyTarget target,
@@ -121,7 +121,7 @@ class FlyToTargetOverlay {
     onAllComplete?.call();
   }
 
-  /// 複数のアイテムをそれぞれ異なる目的地へ飛ばす
+  /// Fly multiple items to their respective destinations
   Future<void> flyToTargets({
     required List<FlyItemWithTarget> itemsWithTargets,
     required FlyAnimationConfig config,
@@ -151,7 +151,7 @@ class FlyToTargetOverlay {
     onAllComplete?.call();
   }
 
-  /// エントリを削除
+  /// Remove an entry
   void _removeEntry(String id) {
     final index = _entries.indexWhere((e) => e.id == id);
     if (index != -1) {
@@ -160,7 +160,7 @@ class FlyToTargetOverlay {
     }
   }
 
-  /// 全てのアニメーションをキャンセル
+  /// Cancel all animations
   void cancelAll() {
     for (final entry in _entries) {
       entry.overlayEntry.remove();
@@ -171,10 +171,10 @@ class FlyToTargetOverlay {
     _entries.clear();
   }
 
-  /// 現在飛行中のアイテム数
+  /// Number of items currently in flight
   int get flyingCount => _entries.length;
 
-  /// リソースを解放
+  /// Dispose resources
   void dispose() {
     cancelAll();
     _overlayState = null;

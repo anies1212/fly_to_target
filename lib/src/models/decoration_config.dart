@@ -1,37 +1,37 @@
 import 'package:flutter/widgets.dart';
 
-/// パーティクルの放出タイプ
+/// Particle emission type
 enum ParticleEmitType {
-  /// 移動に追従して放出
+  /// Emit while following movement
   trailing,
 
-  /// 開始時に一度に放出
+  /// Emit all at once at start
   burst,
 
-  /// 到着時に放出
+  /// Emit on arrival
   arrival,
 }
 
-/// 装飾設定の基底クラス
+/// Base class for decoration configuration
 sealed class DecorationConfig {
   const DecorationConfig();
 }
 
-/// 羽根エフェクト
+/// Feather effect
 class FeatherDecorationConfig extends DecorationConfig {
-  /// 羽根の数
+  /// Number of feathers
   final int count;
 
-  /// 羽根の色
+  /// Feather colors
   final List<Color> colors;
 
-  /// 羽根のサイズ
+  /// Feather size
   final Size size;
 
-  /// 散らばり具合
+  /// Spread amount
   final double spread;
 
-  /// 羽根の揺れの強さ
+  /// Feather flutter intensity
   final double flutter;
 
   const FeatherDecorationConfig({
@@ -46,27 +46,27 @@ class FeatherDecorationConfig extends DecorationConfig {
   });
 }
 
-/// パーティクルエフェクト
+/// Particle effect
 class ParticleDecorationConfig extends DecorationConfig {
-  /// パーティクル数
+  /// Number of particles
   final int count;
 
-  /// パーティクルの色
+  /// Particle colors
   final List<Color> colors;
 
-  /// パーティクルの最小サイズ
+  /// Minimum particle size
   final double minSize;
 
-  /// パーティクルの最大サイズ
+  /// Maximum particle size
   final double maxSize;
 
-  /// 放出タイプ
+  /// Emission type
   final ParticleEmitType emitType;
 
-  /// パーティクルの寿命（0.0-1.0、アニメーション全体の割合）
+  /// Particle lifetime (0.0-1.0, percentage of total animation)
   final double lifetime;
 
-  /// 放出速度
+  /// Emission speed
   final double speed;
 
   const ParticleDecorationConfig({
@@ -83,21 +83,21 @@ class ParticleDecorationConfig extends DecorationConfig {
   });
 }
 
-/// キラキラエフェクト
+/// Sparkle effect
 class SparkleDecorationConfig extends DecorationConfig {
-  /// キラキラの数
+  /// Number of sparkles
   final int count;
 
-  /// キラキラの色
+  /// Sparkle color
   final Color color;
 
-  /// 輝きの強さ
+  /// Brightness intensity
   final double intensity;
 
-  /// キラキラのサイズ
+  /// Sparkle size
   final double size;
 
-  /// 点滅速度
+  /// Blink speed
   final double blinkSpeed;
 
   const SparkleDecorationConfig({
@@ -109,12 +109,12 @@ class SparkleDecorationConfig extends DecorationConfig {
   });
 }
 
-/// カスタム装飾
+/// Custom decoration
 class CustomDecorationConfig extends DecorationConfig {
-  /// カスタム装飾のビルダー
-  /// [context] はBuildContext
-  /// [progress] は0.0-1.0のアニメーション進捗
-  /// [position] は現在の位置
+  /// Custom decoration builder
+  /// [context] is BuildContext
+  /// [progress] is animation progress from 0.0 to 1.0
+  /// [position] is current position
   final Widget Function(
     BuildContext context,
     double progress,

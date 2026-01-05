@@ -2,24 +2,24 @@ import 'dart:math';
 
 import 'package:flutter/painting.dart';
 
-/// 回転方向
+/// Rotation direction
 enum RotationDirection {
   clockwise,
   counterClockwise,
 }
 
-/// エフェクトの集合
+/// Collection of effects
 class FlyEffects {
-  /// 回転エフェクト
+  /// Rotation effect
   final RotationEffect? rotation;
 
-  /// スケール（縮小）エフェクト
+  /// Scale effect
   final ScaleEffect? scale;
 
-  /// フェードアウトエフェクト
+  /// Fade effect
   final FadeEffect? fade;
 
-  /// 軌跡エフェクト
+  /// Trail effect
   final TrailEffect? trail;
 
   const FlyEffects({
@@ -29,11 +29,11 @@ class FlyEffects {
     this.trail,
   });
 
-  /// エフェクトがあるかどうか
+  /// Whether any effects are present
   bool get hasEffects =>
       rotation != null || scale != null || fade != null || trail != null;
 
-  /// copyWithメソッド
+  /// copyWith method
   FlyEffects copyWith({
     RotationEffect? rotation,
     ScaleEffect? scale,
@@ -49,18 +49,18 @@ class FlyEffects {
   }
 }
 
-/// 回転エフェクト
+/// Rotation effect
 class RotationEffect {
-  /// 回転量（ラジアン）
+  /// Rotation amount (radians)
   final double rotations;
 
-  /// 回転方向
+  /// Rotation direction
   final RotationDirection direction;
 
-  /// 回転開始タイミング（0.0-1.0）
+  /// Rotation start timing (0.0-1.0)
   final double startAt;
 
-  /// 回転終了タイミング（0.0-1.0）
+  /// Rotation end timing (0.0-1.0)
   final double endAt;
 
   const RotationEffect({
@@ -70,7 +70,7 @@ class RotationEffect {
     this.endAt = 1.0,
   });
 
-  /// 進捗に応じた回転量を計算
+  /// Calculate rotation amount based on progress
   double calculateRotation(double progress) {
     if (progress < startAt) return 0.0;
     if (progress > endAt) {
@@ -83,18 +83,18 @@ class RotationEffect {
   }
 }
 
-/// スケール（縮小）エフェクト
+/// Scale effect
 class ScaleEffect {
-  /// 開始スケール
+  /// Start scale
   final double startScale;
 
-  /// 終了スケール
+  /// End scale
   final double endScale;
 
-  /// スケール変化開始タイミング
+  /// Scale change start timing
   final double startAt;
 
-  /// スケール変化終了タイミング
+  /// Scale change end timing
   final double endAt;
 
   const ScaleEffect({
@@ -104,7 +104,7 @@ class ScaleEffect {
     this.endAt = 1.0,
   });
 
-  /// 進捗に応じたスケールを計算
+  /// Calculate scale based on progress
   double calculateScale(double progress) {
     if (progress < startAt) return startScale;
     if (progress > endAt) return endScale;
@@ -114,18 +114,18 @@ class ScaleEffect {
   }
 }
 
-/// フェードエフェクト
+/// Fade effect
 class FadeEffect {
-  /// 開始不透明度
+  /// Start opacity
   final double startOpacity;
 
-  /// 終了不透明度
+  /// End opacity
   final double endOpacity;
 
-  /// フェード開始タイミング
+  /// Fade start timing
   final double startAt;
 
-  /// フェード終了タイミング
+  /// Fade end timing
   final double endAt;
 
   const FadeEffect({
@@ -135,7 +135,7 @@ class FadeEffect {
     this.endAt = 1.0,
   });
 
-  /// 進捗に応じた不透明度を計算
+  /// Calculate opacity based on progress
   double calculateOpacity(double progress) {
     if (progress < startAt) return startOpacity;
     if (progress > endAt) return endOpacity;
@@ -145,18 +145,18 @@ class FadeEffect {
   }
 }
 
-/// 軌跡エフェクト
+/// Trail effect
 class TrailEffect {
-  /// 軌跡の長さ（0.0-1.0、全体の何%を表示するか）
+  /// Trail length (0.0-1.0, percentage of total to display)
   final double length;
 
-  /// 軌跡の色
+  /// Trail color
   final Color color;
 
-  /// 軌跡の幅
+  /// Trail width
   final double width;
 
-  /// 軌跡の不透明度減衰
+  /// Trail opacity decay rate
   final double fadeRate;
 
   const TrailEffect({

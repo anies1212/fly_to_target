@@ -6,7 +6,7 @@ import '../models/fly_item.dart';
 import '../models/fly_animation_config.dart';
 import 'fly_to_target_overlay.dart';
 
-/// アニメーション完了イベント
+/// Animation completion event
 class FlyCompletionEvent {
   final String? itemId;
   final DateTime completedAt;
@@ -17,7 +17,7 @@ class FlyCompletionEvent {
   }) : completedAt = completedAt ?? DateTime.now();
 }
 
-/// 複数のウィジェットを目的地に飛ばすアニメーションを制御
+/// Controls animations for flying multiple widgets to destinations
 class FlyToTargetController {
   final FlyToTargetOverlay _overlay = FlyToTargetOverlay();
   final StreamController<FlyCompletionEvent> _completionController =
@@ -26,23 +26,23 @@ class FlyToTargetController {
   TickerProvider? _vsync;
   bool _isAttached = false;
 
-  /// アニメーション完了時のストリーム
+  /// Stream for animation completion events
   Stream<FlyCompletionEvent> get onComplete => _completionController.stream;
 
-  /// 現在飛行中のアイテム数
+  /// Number of items currently in flight
   int get flyingCount => _overlay.flyingCount;
 
-  /// コントローラーがアタッチされているかどうか
+  /// Whether the controller is attached
   bool get isAttached => _isAttached;
 
-  /// BuildContextとTickerProviderでコントローラーを初期化
+  /// Initialize controller with BuildContext and TickerProvider
   void attach(BuildContext context, TickerProvider vsync) {
     _overlay.attach(context);
     _vsync = vsync;
     _isAttached = true;
   }
 
-  /// 複数のアイテムを共通の目的地へ飛ばす
+  /// Fly multiple items to a common destination
   Future<void> flyAll({
     required List<FlyItem> items,
     required FlyTarget target,
@@ -65,7 +65,7 @@ class FlyToTargetController {
     );
   }
 
-  /// 複数のアイテムをそれぞれ異なる目的地へ飛ばす
+  /// Fly multiple items to their respective destinations
   Future<void> flyToTargets({
     required List<FlyItemWithTarget> itemsWithTargets,
     FlyAnimationConfig? config,
@@ -88,7 +88,7 @@ class FlyToTargetController {
     );
   }
 
-  /// 単一のアイテムを飛ばす
+  /// Fly a single item
   Future<void> fly({
     required FlyItem item,
     required FlyTarget target,
@@ -109,7 +109,7 @@ class FlyToTargetController {
     );
   }
 
-  /// 全てのアニメーションをキャンセル
+  /// Cancel all animations
   void cancelAll() {
     _overlay.cancelAll();
   }
@@ -123,7 +123,7 @@ class FlyToTargetController {
     }
   }
 
-  /// リソースを解放
+  /// Dispose resources
   void dispose() {
     _overlay.dispose();
     _completionController.close();

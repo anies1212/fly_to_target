@@ -6,24 +6,24 @@ import 'path_config.dart';
 import 'effects_config.dart';
 import 'decoration_config.dart';
 
-/// アニメーション設定
+/// Animation configuration
 class FlyAnimationConfig {
-  /// アニメーション時間
+  /// Animation duration
   final Duration duration;
 
-  /// イージングカーブ
+  /// Easing curve
   final Curve curve;
 
-  /// 各アイテムの開始遅延（stagger effect）
+  /// Delay between each item start (stagger effect)
   final Duration staggerDelay;
 
-  /// 軌道設定
+  /// Path configuration
   final PathConfig pathConfig;
 
-  /// エフェクト設定
+  /// Effects configuration
   final FlyEffects effects;
 
-  /// 装飾設定
+  /// Decorations configuration
   final List<DecorationConfig> decorations;
 
   const FlyAnimationConfig({
@@ -35,7 +35,7 @@ class FlyAnimationConfig {
     this.decorations = const [],
   });
 
-  /// プリセット: 放物線で飛ぶ
+  /// Preset: parabolic flight
   factory FlyAnimationConfig.parabolic({
     Duration duration = const Duration(milliseconds: 800),
     Curve curve = Curves.easeOut,
@@ -50,7 +50,7 @@ class FlyAnimationConfig {
     );
   }
 
-  /// プリセット: ベジェ曲線で飛ぶ
+  /// Preset: bezier curve flight
   factory FlyAnimationConfig.bezier({
     Duration duration = const Duration(milliseconds: 800),
     Curve curve = Curves.easeOut,
@@ -69,7 +69,7 @@ class FlyAnimationConfig {
     );
   }
 
-  /// プリセット: コインが飛ぶ（回転+縮小+羽根エフェクト）
+  /// Preset: coin flight (rotation + scale + feather effects)
   factory FlyAnimationConfig.coin({
     Duration duration = const Duration(milliseconds: 800),
     Duration staggerDelay = const Duration(milliseconds: 80),
@@ -109,7 +109,7 @@ class FlyAnimationConfig {
     );
   }
 
-  /// プリセット: シンプルな移動（直線、フェードのみ）
+  /// Preset: simple movement (linear, fade only)
   factory FlyAnimationConfig.simple({
     Duration duration = const Duration(milliseconds: 600),
     Curve curve = Curves.easeInOut,
@@ -124,7 +124,7 @@ class FlyAnimationConfig {
     );
   }
 
-  /// copyWithメソッド
+  /// copyWith method
   FlyAnimationConfig copyWith({
     Duration? duration,
     Curve? curve,
