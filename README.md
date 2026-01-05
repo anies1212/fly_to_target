@@ -14,6 +14,11 @@ A Flutter package for animating multiple widgets flying to target positions simu
 - Fully customizable animation timing and curves
 - Easy-to-use API with factory methods and presets
 
+## Example
+|Basic|Coin|Cart|Multiple|
+|---|---|---|---|
+<video src = "https://github.com/user-attachments/assets/54166a12-f1c3-4957-8501-17644818091a">|<video src = "https://github.com/user-attachments/assets/534bea0c-39c0-43bc-bd69-c59dbd2e5f1c">|<video src = "https://github.com/user-attachments/assets/6b8b23df-3aee-438b-8271-6837553a2b35">|<video src = "https://github.com/user-attachments/assets/a072ed02-683d-4702-a2bf-5b783561d77a">
+
 ## Getting Started
 
 Add this to your `pubspec.yaml`:
