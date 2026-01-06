@@ -15,15 +15,16 @@ A Flutter package for animating multiple widgets flying to target positions simu
 - Easy-to-use API with factory methods and presets
 
 ## Example
+
 |Basic|Coin|Cart|Multiple|
 |---|---|---|---|
-<video src = "https://github.com/user-attachments/assets/54166a12-f1c3-4957-8501-17644818091a">|<video src = "https://github.com/user-attachments/assets/534bea0c-39c0-43bc-bd69-c59dbd2e5f1c">|<video src = "https://github.com/user-attachments/assets/6b8b23df-3aee-438b-8271-6837553a2b35">|<video src = "https://github.com/user-attachments/assets/a072ed02-683d-4702-a2bf-5b783561d77a">
+|![Basic](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/basic.gif)|![Coin](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/coin.gif)|![Cart](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/cart.gif)|![Multiple](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/multiple.gif)|
 
 ### Any Customise is available
 
-|Custom Path|Custom Decoration Effects|Full Effects|Heart Burst|Game Rewards|
+|Custom Path|Decoration Effects|Full Effects|Heart Burst|Game Rewards|
 |---|---|---|---|---|
-|<video src ="https://github.com/user-attachments/assets/32a20a69-f97e-4769-8fc7-16c9e4c3e338">|<video src ="https://github.com/user-attachments/assets/0bb400a9-d27f-410e-9e20-4f770b956faf">|<video src ="https://github.com/user-attachments/assets/d8d31e0b-01b3-45ea-8a5f-68c087faa7c5">|<video src ="https://github.com/user-attachments/assets/fc15f85b-4255-485c-a167-a129dc62b5b9">|<video src ="https://github.com/user-attachments/assets/c8349bbe-b762-4c3d-9e4c-3ceddcf77424">|
+|![Custom Path](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/custom_path.gif)|![Decoration Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/decoration_effects.gif)|![Full Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/full_effects.gif)|![Heart Burst](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/heart_burst.gif)|![Game Rewards](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/game_rewards.gif)|
 
 ## Getting Started
 
@@ -31,7 +32,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  fly_to_target: ^0.1.0
+  fly_to_target: ^1.0.0
 ```
 
 ## Usage
