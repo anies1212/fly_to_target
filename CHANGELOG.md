@@ -1,10 +1,23 @@
+## 1.0.1
+
+### Changed
+- Converted README videos from mp4 to GIF for pub.dev compatibility
+- Updated README version reference to 1.0.0
+
 ## 1.0.0
 
-First stable release.
-
+### Added
+- First stable release
 - Translated all documentation comments to English
-- Added 5 custom animation examples (Custom Path, Decoration Effects, Full Effects, Heart Burst, Game Rewards)
-- Removed empty directories
+- Added 5 custom animation examples:
+  - Custom Path (spiral, wave, zigzag, bounce)
+  - Decoration Effects (feather, particle, sparkle)
+  - Full Effects (adjustable parameters with sliders)
+  - Heart Burst
+  - Game Rewards
+
+### Removed
+- Empty directories
 
 ## 0.1.0
 
