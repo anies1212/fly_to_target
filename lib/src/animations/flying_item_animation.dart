@@ -164,6 +164,8 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
                   progress: effectProgress,
                   position: position,
                   itemSize: widget.itemSize,
+                  startPosition: widget.startPosition,
+                  endPosition: widget.endPosition,
                 );
               }).toList()
             : <DecorationPainter>[];

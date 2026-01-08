@@ -20,6 +20,8 @@ class DecorationPainterFactory {
     required double progress,
     required Offset position,
     required Size itemSize,
+    Offset? startPosition,
+    Offset? endPosition,
   }) {
     return switch (config) {
       FeatherDecorationConfig() => FeatherPainter(
@@ -44,6 +46,14 @@ class DecorationPainterFactory {
           config: config,
           progress: progress,
           position: position,
+        ),
+      StarTrailDecorationConfig() => StarTrailPainter(
+          config: config,
+          progress: progress,
+          position: position,
+          itemSize: itemSize,
+          startPosition: startPosition ?? position,
+          endPosition: endPosition ?? position,
         ),
     };
   }
@@ -317,5 +327,100 @@ class CustomDecorationPainter extends DecorationPainter {
   @override
   Widget build(BuildContext context) {
     return config.builder(context, progress, position);
+  }
+}
+
+/// Star trail painter - stars following behind the item
+class StarTrailPainter extends DecorationPainter {
+  final StarTrailDecorationConfig config;
+  final double progress;
+  final Offset position;
+  final Size itemSize;
+  final Offset startPosition;
+  final Offset endPosition;
+
+  StarTrailPainter({
+    required this.config,
+    required this.progress,
+    required this.position,
+    required this.itemSize,
+    required this.startPosition,
+    required this.endPosition,
+  });
+
+  @override
+  bool get drawOnTop => false;
+
+  @override
+  Widget build(BuildContext context) {
+    if (progress <= 0.01) return const SizedBox.shrink();
+
+    final stars = <Widget>[];
+
+    // Calculate direction vector (normalized)
+    final direction = endPosition - startPosition;
+    final length = direction.distance;
+    if (length < 1) return const SizedBox.shrink();
+
+    final normalizedDir = Offset(direction.dx / length, direction.dy / length);
+    // Perpendicular direction for scatter effect
+    final perpDir = Offset(-normalizedDir.dy, normalizedDir.dx);
+
+    for (var i = 0; i < config.count; i++) {
+      // Use consistent random values based on index
+      final randSeed = Random(i * 17 + 31);
+      final randOffset = (randSeed.nextDouble() - 0.5) * 2;
+      final randDistance = randSeed.nextDouble();
+
+      // Position each star behind with scatter
+      final trailFraction = (i + 1) / config.count;
+      final distanceBehind = config.startDistance +
+          config.trailLength * (trailFraction * 0.6 + randDistance * 0.4);
+
+      // Scatter perpendicular to movement direction
+      final scatterAmount = config.spreadWidth * randOffset;
+
+      final starPosition = Offset(
+        position.dx -
+            normalizedDir.dx * distanceBehind +
+            perpDir.dx * scatterAmount,
+        position.dy -
+            normalizedDir.dy * distanceBehind +
+            perpDir.dy * scatterAmount,
+      );
+
+      // Size varies randomly
+      final sizeFactor = 0.4 + randSeed.nextDouble() * 0.6;
+      final starSize =
+          config.minSize + (config.size - config.minSize) * sizeFactor;
+
+      // Opacity decreases towards the tail with variation
+      final baseOpacity =
+          (1.0 - trailFraction * 0.6) * (0.7 + randSeed.nextDouble() * 0.3);
+
+      // Twinkle effect
+      final twinkle = config.twinkle
+          ? (sin(progress * pi * config.twinkleSpeed * 2 + i * 1.5) * 0.4 + 0.6)
+          : 1.0;
+
+      final opacity =
+          (baseOpacity * twinkle * (1.0 - progress * 0.2)).clamp(0.0, 1.0);
+
+      stars.add(
+        Positioned(
+          left: starPosition.dx - starSize / 2,
+          top: starPosition.dy - starSize / 2,
+          child: Opacity(
+            opacity: opacity,
+            child: CustomPaint(
+              size: Size(starSize, starSize),
+              painter: _StarShapePainter(color: config.color),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Stack(children: stars);
   }
 }

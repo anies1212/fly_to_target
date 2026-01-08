@@ -10,7 +10,7 @@ A Flutter package for animating multiple widgets flying to target positions simu
 - Support for various animation paths (linear, parabolic, bezier curve)
 - **Pre-phase animations** (e.g., spread from a point before flying to target)
 - Built-in effects (rotation, scale, fade, trail)
-- Decorative effects (feathers, particles, sparkles)
+- Decorative effects (feathers, particles, sparkles, star trails)
 - Stagger effect for sequential animation starts
 - Fully customizable animation timing and curves
 - Easy-to-use API with factory methods and presets
@@ -250,7 +250,27 @@ FlyTargetFromOffset(Offset(300, 50))
 | `FeatherDecorationConfig` | Floating feathers |
 | `ParticleDecorationConfig` | Particle effects |
 | `SparkleDecorationConfig` | Sparkling stars |
+| `StarTrailDecorationConfig` | Stars trailing behind items |
 | `CustomDecorationConfig` | Custom widget builder |
+
+#### Star Trail Decoration
+
+Stars that follow behind items during flight, like game effects:
+
+```dart
+StarTrailDecorationConfig(
+  count: 12,              // Number of stars
+  color: Colors.amber,    // Star color
+  size: 12.0,             // Maximum star size
+  minSize: 4.0,           // Minimum star size (at tail)
+  trailLength: 60.0,      // Trail length behind item
+  startDistance: 20.0,    // Distance from item to first star
+  spreadWidth: 30.0,      // Horizontal spread width
+  tailOpacity: 0.2,       // Opacity at the tail
+  twinkle: true,          // Enable twinkle effect
+  twinkleSpeed: 3.0,      // Twinkle animation speed
+)
+```
 
 ### Pre-Phase Configurations
 
@@ -287,6 +307,7 @@ Check the [example](example) folder for a complete demo app with:
 - Add to Cart
 - Multiple Targets
 - Spread & Fly (Pre-phase animation)
+- Star Trail (Stars following behind items)
 
 ## License
 

@@ -123,3 +123,49 @@ class CustomDecorationConfig extends DecorationConfig {
 
   const CustomDecorationConfig({required this.builder});
 }
+
+/// Star trail decoration - stars following behind the item
+class StarTrailDecorationConfig extends DecorationConfig {
+  /// Number of stars in the trail
+  final int count;
+
+  /// Star color
+  final Color color;
+
+  /// Maximum star size (at the front)
+  final double size;
+
+  /// Minimum star size (at the tail)
+  final double minSize;
+
+  /// Trail length (distance behind the item)
+  final double trailLength;
+
+  /// Distance from the item to the first star
+  final double startDistance;
+
+  /// Spread width perpendicular to movement direction
+  final double spreadWidth;
+
+  /// Opacity at the tail (0.0-1.0)
+  final double tailOpacity;
+
+  /// Whether stars should twinkle
+  final bool twinkle;
+
+  /// Twinkle speed
+  final double twinkleSpeed;
+
+  const StarTrailDecorationConfig({
+    this.count = 5,
+    this.color = const Color(0xFFFFD700),
+    this.size = 12.0,
+    this.minSize = 4.0,
+    this.trailLength = 60.0,
+    this.startDistance = 20.0,
+    this.spreadWidth = 30.0,
+    this.tailOpacity = 0.2,
+    this.twinkle = true,
+    this.twinkleSpeed = 3.0,
+  });
+}

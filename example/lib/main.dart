@@ -139,6 +139,14 @@ class DemoPage extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const SpreadAndFlyExample()),
             ),
           ),
+          _DemoTile(
+            title: 'Star Trail',
+            subtitle: 'Stars following behind items',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const StarTrailExample()),
+            ),
+          ),
         ],
       ),
     );
@@ -1855,6 +1863,252 @@ class _CurveChip extends StatelessWidget {
       label: Text(label),
       selected: selected,
       onSelected: (_) => onTap(),
+    );
+  }
+}
+
+// ============================================================================
+// Star Trail Example
+// ============================================================================
+
+class StarTrailExample extends StatefulWidget {
+  const StarTrailExample({super.key});
+
+  @override
+  State<StarTrailExample> createState() => _StarTrailExampleState();
+}
+
+class _StarTrailExampleState extends State<StarTrailExample>
+    with TickerProviderStateMixin {
+  final _controller = FlyToTargetController();
+  final _targetKey = GlobalKey();
+  final List<GlobalKey> _itemKeys = List.generate(5, (_) => GlobalKey());
+
+  int _collectedCount = 0;
+  int _starCount = 12;
+  double _starSize = 10.0;
+  double _trailLength = 80.0;
+  double _startDistance = 20.0;
+  double _spreadWidth = 30.0;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_controller.isAttached) {
+      _controller.attach(context, this);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _flyWithStarTrail() async {
+    // Get screen center as gather point
+    final screenSize = MediaQuery.of(context).size;
+    final gatherPoint = Offset(
+      screenSize.width / 2,
+      screenSize.height * 0.6,
+    );
+
+    // Build items with spread positions
+    final items = List.generate(_itemKeys.length, (i) {
+      // Spread positions around gather point
+      final angle = (i / _itemKeys.length) * 2 * pi - pi / 2;
+      final radius = 60.0;
+      final spreadPosition = Offset(
+        gatherPoint.dx + cos(angle) * radius,
+        gatherPoint.dy + sin(angle) * radius,
+      );
+
+      return FlyItem.fromOffset(
+        child: Container(
+          width: 50,
+          height: 50,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Colors.amber, Colors.orange],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.amber,
+                blurRadius: 8,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: const Icon(Icons.confirmation_number,
+              color: Colors.white, size: 28),
+        ),
+        offset: spreadPosition,
+        size: const Size(50, 50),
+      );
+    });
+
+    await _controller.flyAll(
+      items: items,
+      target: FlyTargetFromKey(_targetKey),
+      config: FlyAnimationConfig.spreadAndFly(
+        gatherPoint: gatherPoint,
+        spreadDuration: const Duration(milliseconds: 400),
+        spreadCurve: Curves.easeOutBack,
+        flyDuration: const Duration(milliseconds: 800),
+        flyCurve: Curves.easeIn,
+        staggerDelay: Duration.zero,
+        effects: const FlyEffects(
+          scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
+        ),
+        decorations: [
+          StarTrailDecorationConfig(
+            count: _starCount,
+            color: Colors.amber,
+            size: _starSize,
+            minSize: _starSize * 0.4,
+            trailLength: _trailLength,
+            startDistance: _startDistance,
+            spreadWidth: _spreadWidth,
+            tailOpacity: 0.2,
+            twinkle: true,
+            twinkleSpeed: 4.0,
+          ),
+        ],
+      ),
+    );
+
+    setState(() {
+      _collectedCount += items.length;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Star Trail'),
+        actions: [
+          Container(
+            key: _targetKey,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const Icon(Icons.catching_pokemon, color: Colors.amber),
+                const SizedBox(width: 4),
+                Text(
+                  '$_collectedCount',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Star Trail Settings',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Text('Star Count: $_starCount'),
+            Slider(
+              value: _starCount.toDouble(),
+              min: 3,
+              max: 20,
+              divisions: 17,
+              label: '$_starCount',
+              onChanged: (v) => setState(() => _starCount = v.toInt()),
+            ),
+            Text('Star Size: ${_starSize.toStringAsFixed(0)}'),
+            Slider(
+              value: _starSize,
+              min: 6,
+              max: 24,
+              divisions: 9,
+              label: _starSize.toStringAsFixed(0),
+              onChanged: (v) => setState(() => _starSize = v),
+            ),
+            Text('Trail Length: ${_trailLength.toStringAsFixed(0)}'),
+            Slider(
+              value: _trailLength,
+              min: 20,
+              max: 100,
+              divisions: 8,
+              label: _trailLength.toStringAsFixed(0),
+              onChanged: (v) => setState(() => _trailLength = v),
+            ),
+            Text('Start Distance: ${_startDistance.toStringAsFixed(0)}'),
+            Slider(
+              value: _startDistance,
+              min: 0,
+              max: 60,
+              divisions: 12,
+              label: _startDistance.toStringAsFixed(0),
+              onChanged: (v) => setState(() => _startDistance = v),
+            ),
+            Text('Spread Width: ${_spreadWidth.toStringAsFixed(0)}'),
+            Slider(
+              value: _spreadWidth,
+              min: 0,
+              max: 80,
+              divisions: 16,
+              label: _spreadWidth.toStringAsFixed(0),
+              onChanged: (v) => setState(() => _spreadWidth = v),
+            ),
+            const SizedBox(height: 48),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.amber.withValues(alpha: 0.3),
+                    width: 2,
+                  ),
+                ),
+                child: const Column(
+                  children: [
+                    Icon(Icons.confirmation_number,
+                        size: 48, color: Colors.amber),
+                    SizedBox(height: 8),
+                    Text(
+                      '5 Tickets',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Tap button to collect with star trail!',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _flyWithStarTrail,
+        backgroundColor: Colors.amber,
+        icon: const Icon(Icons.auto_awesome),
+        label: const Text('Fly with Stars'),
+      ),
     );
   }
 }
