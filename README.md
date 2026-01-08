@@ -23,9 +23,9 @@ A Flutter package for animating multiple widgets flying to target positions simu
 
 ### Any Customise is available
 
-|Custom Path|Decoration Effects|Full Effects|Heart Burst|Game Rewards|
-|---|---|---|---|---|
-|![Custom Path](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/custom_path.gif)|![Decoration Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/decoration_effects.gif)|![Full Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/full_effects.gif)|![Heart Burst](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/heart_burst.gif)|![Game Rewards](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/game_rewards.gif)|
+|Custom Path|Decoration Effects|Full Effects|Heart Burst|Game Rewards|Spread & Fly|
+|---|---|---|---|---|---|
+|![Custom Path](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/custom_path.gif)|![Decoration Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/decoration_effects.gif)|![Full Effects](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/full_effects.gif)|![Heart Burst](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/heart_burst.gif)|![Game Rewards](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/game_rewards.gif)|![Spread & Fly](https://raw.githubusercontent.com/anies1212/fly_to_target/main/assets/gifs/spread_and_fly.gif)|
 
 ## Getting Started
 
@@ -277,6 +277,7 @@ Check the [example](example) folder for a complete demo app with:
 - Coin Collection
 - Add to Cart
 - Multiple Targets
+- Spread & Fly (Pre-phase animation)
 
 ## License
 
