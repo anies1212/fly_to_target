@@ -11,6 +11,7 @@ export 'src/models/fly_animation_config.dart';
 export 'src/models/path_config.dart';
 export 'src/models/effects_config.dart';
 export 'src/models/decoration_config.dart';
+export 'src/models/phase_config.dart';
 
 // Widgets
 export 'src/widgets/fly_to_target_scope.dart';

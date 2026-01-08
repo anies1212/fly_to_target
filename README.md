@@ -8,6 +8,7 @@ A Flutter package for animating multiple widgets flying to target positions simu
 
 - Animate multiple widgets simultaneously to one or more targets
 - Support for various animation paths (linear, parabolic, bezier curve)
+- **Pre-phase animations** (e.g., spread from a point before flying to target)
 - Built-in effects (rotation, scale, fade, trail)
 - Decorative effects (feathers, particles, sparkles)
 - Stagger effect for sequential animation starts
@@ -144,6 +145,29 @@ FlyAnimationConfig(
 )
 ```
 
+### Pre-Phase Animation (Spread & Fly)
+
+Add a pre-phase animation where items first spread from a gather point before flying to the target:
+
+```dart
+await _controller.flyAll(
+  items: items,
+  target: FlyTargetFromKey(_targetKey),
+  config: FlyAnimationConfig(
+    // Pre-phase: items spread from center point to their start positions
+    prePhase: SpreadPhaseConfig(
+      gatherPoint: Offset(centerX, centerY),  // All items start here
+      duration: Duration(milliseconds: 400),
+      curve: Curves.easeOutBack,
+    ),
+    // Main phase: fly from spread positions to target
+    duration: Duration(milliseconds: 800),
+    curve: Curves.easeIn,
+    pathConfig: LinearPathConfig(),
+  ),
+);
+```
+
 ## API Reference
 
 ### FlyToTargetController
@@ -222,6 +246,20 @@ FlyTargetFromOffset(Offset(300, 50))
 | `ParticleDecorationConfig` | Particle effects |
 | `SparkleDecorationConfig` | Sparkling stars |
 | `CustomDecorationConfig` | Custom widget builder |
+
+### Pre-Phase Configurations
+
+| Pre-Phase | Description |
+|-----------|-------------|
+| `SpreadPhaseConfig` | Items gather at a point and spread to their start positions before flying |
+
+```dart
+SpreadPhaseConfig(
+  gatherPoint: Offset(x, y),  // Center point where items gather
+  duration: Duration(milliseconds: 400),
+  curve: Curves.easeOutBack,
+)
+```
 
 ### Presets
 

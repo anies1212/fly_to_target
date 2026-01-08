@@ -5,9 +5,14 @@ import 'package:flutter/widgets.dart';
 import 'path_config.dart';
 import 'effects_config.dart';
 import 'decoration_config.dart';
+import 'phase_config.dart';
 
 /// Animation configuration
 class FlyAnimationConfig {
+  /// Pre-animation phase (e.g., spread from gather point)
+  /// If null, items start directly from their origin positions
+  final PrePhaseConfig? prePhase;
+
   /// Animation duration
   final Duration duration;
 
@@ -27,6 +32,7 @@ class FlyAnimationConfig {
   final List<DecorationConfig> decorations;
 
   const FlyAnimationConfig({
+    this.prePhase,
     this.duration = const Duration(milliseconds: 800),
     this.curve = Curves.easeInOut,
     this.staggerDelay = const Duration(milliseconds: 50),
@@ -126,6 +132,7 @@ class FlyAnimationConfig {
 
   /// copyWith method
   FlyAnimationConfig copyWith({
+    PrePhaseConfig? prePhase,
     Duration? duration,
     Curve? curve,
     Duration? staggerDelay,
@@ -134,6 +141,7 @@ class FlyAnimationConfig {
     List<DecorationConfig>? decorations,
   }) {
     return FlyAnimationConfig(
+      prePhase: prePhase ?? this.prePhase,
       duration: duration ?? this.duration,
       curve: curve ?? this.curve,
       staggerDelay: staggerDelay ?? this.staggerDelay,

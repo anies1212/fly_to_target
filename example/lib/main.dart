@@ -119,6 +119,26 @@ class DemoPage extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const GameRewardsExample()),
             ),
           ),
+          const Divider(),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: Text(
+              'Pre-Phase Animations',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+          _DemoTile(
+            title: 'Spread & Fly',
+            subtitle: 'Items spread from center then fly to target',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const SpreadAndFlyExample()),
+            ),
+          ),
         ],
       ),
     );
@@ -147,7 +167,7 @@ class _DemoTile extends StatelessWidget {
   }
 }
 
-/// 基本的なアニメーション例
+/// Basic animation example
 class BasicExample extends StatefulWidget {
   const BasicExample({super.key});
 
@@ -242,7 +262,7 @@ class _BasicExampleState extends State<BasicExample>
   }
 }
 
-/// コインアニメーション例
+/// Coin animation example
 class CoinExample extends StatefulWidget {
   const CoinExample({super.key});
 
@@ -274,7 +294,7 @@ class _CoinExampleState extends State<CoinExample>
     final random = Random();
     final screenSize = MediaQuery.of(context).size;
 
-    // ランダムな位置からコインを生成
+    // Generate coins at random positions
     final coinPositions = List.generate(8, (_) {
       return Offset(
         50 + random.nextDouble() * (screenSize.width - 100),
@@ -372,7 +392,7 @@ class _CoinExampleState extends State<CoinExample>
   }
 }
 
-/// カートへ追加アニメーション例
+/// Add to cart animation example
 class CartExample extends StatefulWidget {
   const CartExample({super.key});
 
@@ -526,7 +546,7 @@ class _CartExampleState extends State<CartExample>
   }
 }
 
-/// 複数目的地への同時アニメーション例
+/// Multiple targets animation example
 class MultipleTargetsExample extends StatefulWidget {
   const MultipleTargetsExample({super.key});
 
@@ -678,7 +698,7 @@ class _MultipleTargetsExampleState extends State<MultipleTargetsExample>
   }
 }
 
-/// カスタム軌道アニメーション例
+/// Custom path animation example
 class CustomPathExample extends StatefulWidget {
   const CustomPathExample({super.key});
 
@@ -710,7 +730,7 @@ class _CustomPathExampleState extends State<CustomPathExample>
     return switch (_selectedPath) {
       'spiral' => CustomPathConfig(
           pathFunction: (t, start, end) {
-            // 螺旋軌道
+            // Spiral path
             final angle = t * 4 * pi;
             final radius = (1 - t) * 100;
             final linearX = start.dx + (end.dx - start.dx) * t;
@@ -723,7 +743,7 @@ class _CustomPathExampleState extends State<CustomPathExample>
         ),
       'wave' => CustomPathConfig(
           pathFunction: (t, start, end) {
-            // 波形軌道
+            // Wave path
             final linearX = start.dx + (end.dx - start.dx) * t;
             final linearY = start.dy + (end.dy - start.dy) * t;
             final wave = sin(t * 6 * pi) * 50 * (1 - t);
@@ -732,7 +752,7 @@ class _CustomPathExampleState extends State<CustomPathExample>
         ),
       'zigzag' => CustomPathConfig(
           pathFunction: (t, start, end) {
-            // ジグザグ軌道
+            // Zigzag path
             final linearX = start.dx + (end.dx - start.dx) * t;
             final linearY = start.dy + (end.dy - start.dy) * t;
             final segments = 5;
@@ -745,7 +765,7 @@ class _CustomPathExampleState extends State<CustomPathExample>
         ),
       'bounce' => CustomPathConfig(
           pathFunction: (t, start, end) {
-            // バウンス軌道
+            // Bounce path
             final linearX = start.dx + (end.dx - start.dx) * t;
             final linearY = start.dy + (end.dy - start.dy) * t;
             final bounceHeight = sin(t * pi) * 150 * pow(1 - t, 0.5);
@@ -880,7 +900,7 @@ class _PathChip extends StatelessWidget {
   }
 }
 
-/// 装飾エフェクトアニメーション例
+/// Decoration effects animation example
 class DecorationExample extends StatefulWidget {
   const DecorationExample({super.key});
 
@@ -1068,7 +1088,7 @@ class _DecorationExampleState extends State<DecorationExample>
   }
 }
 
-/// フルエフェクトアニメーション例
+/// Full effects animation example
 class FullEffectsExample extends StatefulWidget {
   const FullEffectsExample({super.key});
 
@@ -1253,7 +1273,7 @@ class _FullEffectsExampleState extends State<FullEffectsExample>
   }
 }
 
-/// ハートバーストアニメーション例
+/// Heart burst animation example
 class HeartBurstExample extends StatefulWidget {
   const HeartBurstExample({super.key});
 
@@ -1283,7 +1303,7 @@ class _HeartBurstExampleState extends State<HeartBurstExample>
   }
 
   Future<void> _burstHearts() async {
-    // ソース位置を取得
+    // Get source position
     final sourceBox =
         _sourceKey.currentContext?.findRenderObject() as RenderBox?;
     if (sourceBox == null) return;
@@ -1419,7 +1439,7 @@ class _HeartBurstExampleState extends State<HeartBurstExample>
   }
 }
 
-/// ゲーム報酬アニメーション例
+/// Game rewards animation example
 class GameRewardsExample extends StatefulWidget {
   const GameRewardsExample({super.key});
 
@@ -1453,7 +1473,7 @@ class _GameRewardsExampleState extends State<GameRewardsExample>
     final screenSize = MediaQuery.of(context).size;
     final random = Random();
 
-    // スター
+    // Stars
     final stars = List.generate(6, (i) {
       return FlyItemWithTarget(
         item: FlyItem.fromOffset(
@@ -1469,7 +1489,7 @@ class _GameRewardsExampleState extends State<GameRewardsExample>
       );
     });
 
-    // ジェム
+    // Gems
     final gems = List.generate(4, (i) {
       final gemColors = [Colors.cyan, Colors.purple, Colors.green, Colors.red];
       return FlyItemWithTarget(
@@ -1634,6 +1654,260 @@ class _RewardCounter extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Spread & Fly animation example
+/// Items spread from a center point, then fly to the target
+class SpreadAndFlyExample extends StatefulWidget {
+  const SpreadAndFlyExample({super.key});
+
+  @override
+  State<SpreadAndFlyExample> createState() => _SpreadAndFlyExampleState();
+}
+
+class _SpreadAndFlyExampleState extends State<SpreadAndFlyExample>
+    with TickerProviderStateMixin {
+  final _controller = FlyToTargetController();
+  final _targetKey = GlobalKey();
+  final _sourceKey = GlobalKey();
+  int _ticketCount = 0;
+
+  // Configurable parameters
+  Duration _spreadDuration = const Duration(milliseconds: 400);
+  Curve _spreadCurve = Curves.easeOutBack;
+  Duration _flyDuration = const Duration(milliseconds: 800);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_controller.isAttached) {
+      _controller.attach(context, this);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _spreadAndFly() async {
+    // Get source (FAB) position
+    final sourceBox =
+        _sourceKey.currentContext?.findRenderObject() as RenderBox?;
+    if (sourceBox == null) return;
+
+    final sourcePosition = sourceBox.localToGlobal(Offset.zero);
+    final sourceSize = sourceBox.size;
+    final centerPoint = Offset(
+      sourcePosition.dx + sourceSize.width / 2,
+      sourcePosition.dy + sourceSize.height / 2,
+    );
+
+    // Generate spread positions for tickets (zigzag pattern above the FAB)
+    const ticketSize = 36.0;
+    const verticalSpacing = 20.0;
+    const horizontalRange = 60.0;
+    const itemCount = 6;
+
+    final items = List.generate(itemCount, (i) {
+      // Zigzag offset
+      final dy = -i * verticalSpacing - 40;
+      final dx = switch (i % 4) {
+        0 => 0.0,
+        1 => -horizontalRange * 0.8,
+        2 => horizontalRange * 0.5,
+        3 => -horizontalRange * 0.4,
+        _ => 0.0,
+      };
+
+      return FlyItem.fromOffset(
+        child: Container(
+          width: ticketSize,
+          height: ticketSize,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [Colors.amber.shade300, Colors.orange.shade600],
+            ),
+            borderRadius: BorderRadius.circular(6),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.orange.withValues(alpha: 0.4),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.confirmation_number,
+            color: Colors.white,
+            size: 22,
+          ),
+        ),
+        // Spread destination position (startPosition)
+        offset: Offset(
+          centerPoint.dx + dx - ticketSize / 2,
+          centerPoint.dy + dy - ticketSize / 2,
+        ),
+        size: const Size(ticketSize, ticketSize),
+      );
+    });
+
+    await _controller.flyAll(
+      items: items,
+      target: FlyTargetFromKey(_targetKey),
+      config: FlyAnimationConfig(
+        // prePhase: Spread animation from center
+        prePhase: SpreadPhaseConfig(
+          gatherPoint: centerPoint,
+          duration: _spreadDuration,
+          curve: _spreadCurve,
+        ),
+        // Main phase: Fly from spread positions to target
+        duration: _flyDuration,
+        curve: Curves.easeIn,
+        staggerDelay: Duration.zero,
+        pathConfig: const LinearPathConfig(),
+        effects: const FlyEffects(
+          scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
+        ),
+      ),
+    );
+
+    setState(() {
+      _ticketCount += itemCount;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Spread & Fly'),
+        backgroundColor: Colors.orange.shade100,
+        actions: [
+          Container(
+            key: _targetKey,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                const Icon(Icons.confirmation_number, color: Colors.orange),
+                const SizedBox(width: 8),
+                Text(
+                  '$_ticketCount',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Pre-Phase (Spread) Settings',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text('Spread Duration: ${_spreadDuration.inMilliseconds}ms'),
+            Slider(
+              value: _spreadDuration.inMilliseconds.toDouble(),
+              min: 100,
+              max: 800,
+              divisions: 7,
+              label: '${_spreadDuration.inMilliseconds}ms',
+              onChanged: (v) => setState(
+                () => _spreadDuration = Duration(milliseconds: v.toInt()),
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text('Spread Curve:'),
+            Wrap(
+              spacing: 8,
+              children: [
+                _CurveChip(
+                  label: 'easeOutBack',
+                  selected: _spreadCurve == Curves.easeOutBack,
+                  onTap: () =>
+                      setState(() => _spreadCurve = Curves.easeOutBack),
+                ),
+                _CurveChip(
+                  label: 'easeOut',
+                  selected: _spreadCurve == Curves.easeOut,
+                  onTap: () => setState(() => _spreadCurve = Curves.easeOut),
+                ),
+                _CurveChip(
+                  label: 'elasticOut',
+                  selected: _spreadCurve == Curves.elasticOut,
+                  onTap: () => setState(() => _spreadCurve = Curves.elasticOut),
+                ),
+              ],
+            ),
+            const Divider(height: 32),
+            const Text(
+              'Main Phase (Fly) Settings',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text('Fly Duration: ${_flyDuration.inMilliseconds}ms'),
+            Slider(
+              value: _flyDuration.inMilliseconds.toDouble(),
+              min: 300,
+              max: 1500,
+              divisions: 12,
+              label: '${_flyDuration.inMilliseconds}ms',
+              onChanged: (v) => setState(
+                () => _flyDuration = Duration(milliseconds: v.toInt()),
+              ),
+            ),
+            const SizedBox(height: 32),
+            const Center(
+              child: Text(
+                'Tap the FAB to see the spread & fly animation!',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        key: _sourceKey,
+        onPressed: _spreadAndFly,
+        backgroundColor: Colors.orange,
+        icon: const Icon(Icons.confirmation_number),
+        label: const Text('Collect Tickets'),
+      ),
+    );
+  }
+}
+
+class _CurveChip extends StatelessWidget {
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _CurveChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FilterChip(
+      label: Text(label),
+      selected: selected,
+      onSelected: (_) => onTap(),
     );
   }
 }

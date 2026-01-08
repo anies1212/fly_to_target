@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import '../models/fly_item.dart';
 import '../models/fly_animation_config.dart';
+import '../models/phase_config.dart';
 import '../decorations/decoration_painter.dart';
 
 /// Widget for animating flying items
@@ -32,26 +33,58 @@ class FlyingItemAnimation extends StatefulWidget {
 }
 
 class _FlyingItemAnimationState extends State<FlyingItemAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _curvedAnimation;
+    with TickerProviderStateMixin {
+  // Pre-phase (spread) animation controller
+  AnimationController? _prePhaseController;
+  Animation<double>? _prePhaseAnimation;
+
+  // Main phase animation controller
+  late AnimationController _mainController;
+  late Animation<double> _mainAnimation;
+
   bool _started = false;
+  bool _prePhaseCompleted = false;
+
+  SpreadPhaseConfig? get _spreadConfig {
+    final prePhase = widget.config.prePhase;
+    return prePhase is SpreadPhaseConfig ? prePhase : null;
+  }
 
   @override
   void initState() {
     super.initState();
 
-    _controller = AnimationController(
+    // Setup pre-phase animation if configured
+    final spreadConfig = _spreadConfig;
+    if (spreadConfig != null) {
+      _prePhaseController = AnimationController(
+        duration: spreadConfig.duration,
+        vsync: this,
+      );
+      _prePhaseAnimation = CurvedAnimation(
+        parent: _prePhaseController!,
+        curve: spreadConfig.curve,
+      );
+      _prePhaseController!.addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _prePhaseCompleted = true;
+          _mainController.forward();
+        }
+      });
+    } else {
+      _prePhaseCompleted = true;
+    }
+
+    // Setup main animation
+    _mainController = AnimationController(
       duration: widget.config.duration,
       vsync: this,
     );
-
-    _curvedAnimation = CurvedAnimation(
-      parent: _controller,
+    _mainAnimation = CurvedAnimation(
+      parent: _mainController,
       curve: widget.config.curve,
     );
-
-    _controller.addStatusListener((status) {
+    _mainController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         widget.onComplete?.call();
       }
@@ -68,45 +101,72 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
   void _startAnimation() {
     if (mounted && !_started) {
       _started = true;
-      _controller.forward();
+      if (_prePhaseController != null) {
+        _prePhaseController!.forward();
+      } else {
+        _mainController.forward();
+      }
     }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _prePhaseController?.dispose();
+    _mainController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _curvedAnimation,
+      animation: Listenable.merge([
+        if (_prePhaseAnimation != null) _prePhaseAnimation!,
+        _mainAnimation,
+      ]),
       builder: (context, child) {
-        final progress = _curvedAnimation.value;
+        final Offset position;
+        final double effectProgress;
 
-        // Calculate position
-        final position = widget.config.pathConfig.calculatePosition(
-          progress,
-          widget.startPosition,
-          widget.endPosition,
-        );
-
-        // Apply effects
-        final effects = widget.config.effects;
-        final rotation = effects.rotation?.calculateRotation(progress) ?? 0.0;
-        final scale = effects.scale?.calculateScale(progress) ?? 1.0;
-        final opacity = effects.fade?.calculateOpacity(progress) ?? 1.0;
-
-        // Build decorations
-        final decorations = widget.config.decorations.map((config) {
-          return DecorationPainterFactory.create(
-            config: config,
-            progress: progress,
-            position: position,
-            itemSize: widget.itemSize,
+        final spreadConfig = _spreadConfig;
+        if (spreadConfig != null && !_prePhaseCompleted) {
+          // Pre-phase: spread from gather point to start position
+          final preProgress = _prePhaseAnimation?.value ?? 0.0;
+          position = Offset.lerp(
+            spreadConfig.gatherPoint,
+            widget.startPosition,
+            preProgress,
+          )!;
+          // No effects during pre-phase
+          effectProgress = 0.0;
+        } else {
+          // Main phase: fly from start to end
+          final mainProgress = _mainAnimation.value;
+          position = widget.config.pathConfig.calculatePosition(
+            mainProgress,
+            widget.startPosition,
+            widget.endPosition,
           );
-        }).toList();
+          effectProgress = mainProgress;
+        }
+
+        // Apply effects (only during main phase)
+        final effects = widget.config.effects;
+        final rotation =
+            effects.rotation?.calculateRotation(effectProgress) ?? 0.0;
+        final scale = effects.scale?.calculateScale(effectProgress) ?? 1.0;
+        final opacity = effects.fade?.calculateOpacity(effectProgress) ?? 1.0;
+
+        // Build decorations (only during main phase)
+        final decorations = _prePhaseCompleted
+            ? widget.config.decorations.map((config) {
+                return DecorationPainterFactory.create(
+                  config: config,
+                  progress: effectProgress,
+                  position: position,
+                  itemSize: widget.itemSize,
+                );
+              }).toList()
+            : <DecorationPainter>[];
 
         return Stack(
           children: [
