@@ -1,3 +1,18 @@
+## 1.1.0
+
+### Added
+- Pre-phase animation support with `SpreadPhaseConfig`
+  - Items can gather at a point and spread before flying to target
+- New factory methods:
+  - `FlyAnimationConfig.spreadAndFly()` - Spread from point then fly to target
+  - `FlyAnimationConfig.cart()` - Add to cart animation (parabolic + scale + fade)
+  - `FlyAnimationConfig.heart()` - Like/burst animation (bezier + rotation + particles)
+  - `FlyAnimationConfig.gameReward()` - Game reward collection (bezier + rotation + sparkles)
+- New example: Spread & Fly demo
+
+### Changed
+- Updated existing examples to use new factory methods
+
 ## 1.0.1
 
 ### Changed
