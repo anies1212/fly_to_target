@@ -446,15 +446,8 @@ class _CartExampleState extends State<CartExample>
         key: key,
       ),
       target: FlyTargetFromKey(_cartKey),
-      config: const FlyAnimationConfig(
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeOut,
-        pathConfig: ParabolicPathConfig(height: -80),
-        effects: FlyEffects(
-          scale: ScaleEffect(endScale: 0.5),
-          fade: FadeEffect(startAt: 0.7),
-        ),
-      ),
+      // Using cart factory for add-to-cart animation
+      config: FlyAnimationConfig.cart(),
     );
 
     setState(() {
@@ -1346,33 +1339,8 @@ class _HeartBurstExampleState extends State<HeartBurstExample>
     await _controller.flyAll(
       items: items,
       target: FlyTargetFromKey(_targetKey),
-      config: FlyAnimationConfig(
-        duration: const Duration(milliseconds: 1200),
-        curve: Curves.easeOutCubic,
-        staggerDelay: const Duration(milliseconds: 40),
-        pathConfig: BezierPathConfig.auto(curvature: 0.6, randomness: 0.3),
-        effects: const FlyEffects(
-          rotation: RotationEffect(
-            rotations: pi / 2,
-            direction: RotationDirection.counterClockwise,
-          ),
-          scale: ScaleEffect(
-            startScale: 1.2,
-            endScale: 0.4,
-            startAt: 0.3,
-          ),
-          fade: FadeEffect(startAt: 0.75),
-        ),
-        decorations: [
-          ParticleDecorationConfig(
-            count: 8,
-            colors: [Colors.pink.shade200, Colors.red.shade200],
-            minSize: 2,
-            maxSize: 5,
-            lifetime: 0.6,
-          ),
-        ],
-      ),
+      // Using heart factory for like/burst animation
+      config: FlyAnimationConfig.heart(),
     );
 
     setState(() {
@@ -1518,25 +1486,8 @@ class _GameRewardsExampleState extends State<GameRewardsExample>
 
     await _controller.flyToTargets(
       itemsWithTargets: [...stars, ...gems],
-      config: FlyAnimationConfig(
-        duration: const Duration(milliseconds: 900),
-        curve: Curves.easeOutBack,
-        staggerDelay: const Duration(milliseconds: 50),
-        pathConfig: BezierPathConfig.auto(curvature: 0.5),
-        effects: const FlyEffects(
-          rotation: RotationEffect(rotations: 2 * pi),
-          scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
-          fade: FadeEffect(startAt: 0.8),
-        ),
-        decorations: [
-          const SparkleDecorationConfig(
-            count: 5,
-            size: 8,
-            color: Colors.white,
-            blinkSpeed: 4,
-          ),
-        ],
-      ),
+      // Using gameReward factory for reward collection animation
+      config: FlyAnimationConfig.gameReward(),
     );
 
     setState(() {

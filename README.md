@@ -273,6 +273,9 @@ FlyAnimationConfig.simple()        // Linear with fade
 FlyAnimationConfig.parabolic()     // Arc trajectory
 FlyAnimationConfig.bezier()        // Smooth curve
 FlyAnimationConfig.coin()          // Full effects for coins
+FlyAnimationConfig.cart()          // Add to cart (parabolic + scale + fade)
+FlyAnimationConfig.heart()         // Like/burst (bezier + rotation + particles)
+FlyAnimationConfig.gameReward()    // Game rewards (bezier + rotation + sparkles)
 FlyAnimationConfig.spreadAndFly()  // Spread from point then fly to target
 ```
 

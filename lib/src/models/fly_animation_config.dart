@@ -157,6 +157,100 @@ class FlyAnimationConfig {
     );
   }
 
+  /// Preset: add to cart animation (parabolic + scale + fade)
+  factory FlyAnimationConfig.cart({
+    Duration duration = const Duration(milliseconds: 500),
+    Curve curve = Curves.easeOut,
+    double height = -80,
+  }) {
+    return FlyAnimationConfig(
+      duration: duration,
+      curve: curve,
+      staggerDelay: Duration.zero,
+      pathConfig: ParabolicPathConfig(height: height),
+      effects: const FlyEffects(
+        scale: ScaleEffect(
+          endScale: 0.5,
+        ),
+        fade: FadeEffect(
+          startAt: 0.7,
+        ),
+      ),
+    );
+  }
+
+  /// Preset: heart/like burst animation (bezier + rotation + scale + particles)
+  factory FlyAnimationConfig.heart({
+    Duration duration = const Duration(milliseconds: 1200),
+    Duration staggerDelay = const Duration(milliseconds: 40),
+  }) {
+    return FlyAnimationConfig(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      staggerDelay: staggerDelay,
+      pathConfig: BezierPathConfig.auto(
+        curvature: 0.6,
+        randomness: 0.3,
+      ),
+      effects: const FlyEffects(
+        rotation: RotationEffect(
+          rotations: pi / 2,
+          direction: RotationDirection.counterClockwise,
+        ),
+        scale: ScaleEffect(
+          startScale: 1.2,
+          endScale: 0.4,
+          startAt: 0.3,
+        ),
+        fade: FadeEffect(
+          startAt: 0.75,
+        ),
+      ),
+      decorations: const [
+        ParticleDecorationConfig(
+          count: 8,
+          minSize: 2,
+          maxSize: 5,
+          lifetime: 0.6,
+        ),
+      ],
+    );
+  }
+
+  /// Preset: game reward collection (bezier + rotation + scale + sparkles)
+  factory FlyAnimationConfig.gameReward({
+    Duration duration = const Duration(milliseconds: 900),
+    Duration staggerDelay = const Duration(milliseconds: 50),
+  }) {
+    return FlyAnimationConfig(
+      duration: duration,
+      curve: Curves.easeOutBack,
+      staggerDelay: staggerDelay,
+      pathConfig: BezierPathConfig.auto(
+        curvature: 0.5,
+      ),
+      effects: FlyEffects(
+        rotation: RotationEffect(
+          rotations: 2 * pi,
+        ),
+        scale: const ScaleEffect(
+          endScale: 0.5,
+          startAt: 0.5,
+        ),
+        fade: const FadeEffect(
+          startAt: 0.8,
+        ),
+      ),
+      decorations: const [
+        SparkleDecorationConfig(
+          count: 5,
+          size: 8,
+          blinkSpeed: 4,
+        ),
+      ],
+    );
+  }
+
   /// copyWith method
   FlyAnimationConfig copyWith({
     PrePhaseConfig? prePhase,
