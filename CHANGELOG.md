@@ -1,3 +1,13 @@
+## 1.2.0
+
+### Added
+- `StarTrailDecorationConfig` - Stars trailing behind items like game effects
+  - `count` - Number of stars in the trail
+  - `startDistance` - Distance from item to first star
+  - `spreadWidth` - Horizontal spread width
+  - `twinkle` - Twinkle animation effect
+- New example: Star Trail demo
+
 ## 1.1.0
 
 ### Added
