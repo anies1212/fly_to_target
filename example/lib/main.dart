@@ -1760,18 +1760,14 @@ class _SpreadAndFlyExampleState extends State<SpreadAndFlyExample>
     await _controller.flyAll(
       items: items,
       target: FlyTargetFromKey(_targetKey),
-      config: FlyAnimationConfig(
-        // prePhase: Spread animation from center
-        prePhase: SpreadPhaseConfig(
-          gatherPoint: centerPoint,
-          duration: _spreadDuration,
-          curve: _spreadCurve,
-        ),
-        // Main phase: Fly from spread positions to target
-        duration: _flyDuration,
-        curve: Curves.easeIn,
+      // Using factory method for spread & fly animation
+      config: FlyAnimationConfig.spreadAndFly(
+        gatherPoint: centerPoint,
+        spreadDuration: _spreadDuration,
+        spreadCurve: _spreadCurve,
+        flyDuration: _flyDuration,
+        flyCurve: Curves.easeIn,
         staggerDelay: Duration.zero,
-        pathConfig: const LinearPathConfig(),
         effects: const FlyEffects(
           scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
         ),

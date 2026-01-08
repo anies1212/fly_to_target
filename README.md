@@ -150,20 +150,25 @@ FlyAnimationConfig(
 Add a pre-phase animation where items first spread from a gather point before flying to the target:
 
 ```dart
+// Simple: using factory method
 await _controller.flyAll(
   items: items,
   target: FlyTargetFromKey(_targetKey),
-  config: FlyAnimationConfig(
-    // Pre-phase: items spread from center point to their start positions
-    prePhase: SpreadPhaseConfig(
-      gatherPoint: Offset(centerX, centerY),  // All items start here
-      duration: Duration(milliseconds: 400),
-      curve: Curves.easeOutBack,
-    ),
-    // Main phase: fly from spread positions to target
-    duration: Duration(milliseconds: 800),
-    curve: Curves.easeIn,
-    pathConfig: LinearPathConfig(),
+  config: FlyAnimationConfig.spreadAndFly(
+    gatherPoint: Offset(centerX, centerY),
+  ),
+);
+
+// Custom: with full configuration
+await _controller.flyAll(
+  items: items,
+  target: FlyTargetFromKey(_targetKey),
+  config: FlyAnimationConfig.spreadAndFly(
+    gatherPoint: Offset(centerX, centerY),
+    spreadDuration: Duration(milliseconds: 400),
+    spreadCurve: Curves.easeOutBack,
+    flyDuration: Duration(milliseconds: 800),
+    flyCurve: Curves.easeIn,
   ),
 );
 ```
@@ -264,10 +269,11 @@ SpreadPhaseConfig(
 ### Presets
 
 ```dart
-FlyAnimationConfig.simple()     // Linear with fade
-FlyAnimationConfig.parabolic()  // Arc trajectory
-FlyAnimationConfig.bezier()     // Smooth curve
-FlyAnimationConfig.coin()       // Full effects for coins
+FlyAnimationConfig.simple()        // Linear with fade
+FlyAnimationConfig.parabolic()     // Arc trajectory
+FlyAnimationConfig.bezier()        // Smooth curve
+FlyAnimationConfig.coin()          // Full effects for coins
+FlyAnimationConfig.spreadAndFly()  // Spread from point then fly to target
 ```
 
 ## Example

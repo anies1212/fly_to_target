@@ -130,6 +130,33 @@ class FlyAnimationConfig {
     );
   }
 
+  /// Preset: spread from gather point then fly to target
+  factory FlyAnimationConfig.spreadAndFly({
+    required Offset gatherPoint,
+    Duration spreadDuration = const Duration(milliseconds: 400),
+    Curve spreadCurve = Curves.easeOutBack,
+    Duration flyDuration = const Duration(milliseconds: 800),
+    Curve flyCurve = Curves.easeIn,
+    Duration staggerDelay = const Duration(milliseconds: 50),
+    PathConfig pathConfig = const LinearPathConfig(),
+    FlyEffects effects = const FlyEffects(),
+    List<DecorationConfig> decorations = const [],
+  }) {
+    return FlyAnimationConfig(
+      prePhase: SpreadPhaseConfig(
+        gatherPoint: gatherPoint,
+        duration: spreadDuration,
+        curve: spreadCurve,
+      ),
+      duration: flyDuration,
+      curve: flyCurve,
+      staggerDelay: staggerDelay,
+      pathConfig: pathConfig,
+      effects: effects,
+      decorations: decorations,
+    );
+  }
+
   /// copyWith method
   FlyAnimationConfig copyWith({
     PrePhaseConfig? prePhase,
