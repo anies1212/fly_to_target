@@ -1,3 +1,11 @@
+## 1.3.0
+
+### Added
+- `onItemComplete` callback for `flyAll` method
+  - Called each time an individual item reaches its target
+  - Receives the index of the completed item
+- Stagger delay slider in Star Trail example
+
 ## 1.2.0
 
 ### Added
