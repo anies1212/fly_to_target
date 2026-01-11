@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fly_to_target/fly_to_target.dart';
 
 void main() {
@@ -1890,6 +1891,7 @@ class _StarTrailExampleState extends State<StarTrailExample>
   double _trailLength = 80.0;
   double _startDistance = 20.0;
   double _spreadWidth = 30.0;
+  int _staggerDelayMs = 80;
 
   @override
   void didChangeDependencies() {
@@ -1960,7 +1962,7 @@ class _StarTrailExampleState extends State<StarTrailExample>
         spreadCurve: Curves.easeOutBack,
         flyDuration: const Duration(milliseconds: 800),
         flyCurve: Curves.easeIn,
-        staggerDelay: Duration.zero,
+        staggerDelay: Duration(milliseconds: _staggerDelayMs),
         effects: const FlyEffects(
           scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
         ),
@@ -1979,6 +1981,10 @@ class _StarTrailExampleState extends State<StarTrailExample>
           ),
         ],
       ),
+      onItemComplete: (index) {
+        debugPrint('✨ Item $index arrived!');
+        HapticFeedback.lightImpact();
+      },
     );
 
     setState(() {
@@ -2065,6 +2071,15 @@ class _StarTrailExampleState extends State<StarTrailExample>
               divisions: 16,
               label: _spreadWidth.toStringAsFixed(0),
               onChanged: (v) => setState(() => _spreadWidth = v),
+            ),
+            Text('Stagger Delay: ${_staggerDelayMs}ms'),
+            Slider(
+              value: _staggerDelayMs.toDouble(),
+              min: 0,
+              max: 200,
+              divisions: 20,
+              label: '${_staggerDelayMs}ms',
+              onChanged: (v) => setState(() => _staggerDelayMs = v.toInt()),
             ),
             const SizedBox(height: 48),
             Center(

@@ -43,10 +43,14 @@ class FlyToTargetController {
   }
 
   /// Fly multiple items to a common destination
+  ///
+  /// [onItemComplete] is called each time an individual item reaches its target.
+  /// The callback receives the index of the completed item.
   Future<void> flyAll({
     required List<FlyItem> items,
     required FlyTarget target,
     FlyAnimationConfig? config,
+    void Function(int index)? onItemComplete,
   }) async {
     _ensureAttached();
 
@@ -57,6 +61,7 @@ class FlyToTargetController {
       target: target,
       config: effectiveConfig,
       vsync: _vsync!,
+      onItemComplete: onItemComplete,
       onAllComplete: () {
         for (final item in items) {
           _completionController.add(FlyCompletionEvent(itemId: item.id));

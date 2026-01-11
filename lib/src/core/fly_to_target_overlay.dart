@@ -97,6 +97,7 @@ class FlyToTargetOverlay {
     required FlyTarget target,
     required FlyAnimationConfig config,
     required TickerProvider vsync,
+    void Function(int index)? onItemComplete,
     VoidCallback? onAllComplete,
   }) async {
     if (items.isEmpty) {
@@ -107,12 +108,16 @@ class FlyToTargetOverlay {
     final futures = <Future<void>>[];
 
     for (var i = 0; i < items.length; i++) {
+      final index = i;
       final future = fly(
         item: items[i],
         target: target,
         config: config,
         vsync: vsync,
         index: i,
+        onComplete: () {
+          onItemComplete?.call(index);
+        },
       );
       futures.add(future);
     }
