@@ -14,6 +14,7 @@ class FlyingItemAnimation extends StatefulWidget {
   final FlyAnimationConfig config;
   final TickerProvider vsync;
   final Duration delay;
+  final VoidCallback? onSpreadComplete;
   final VoidCallback? onComplete;
 
   const FlyingItemAnimation({
@@ -25,6 +26,7 @@ class FlyingItemAnimation extends StatefulWidget {
     required this.config,
     required this.vsync,
     this.delay = Duration.zero,
+    this.onSpreadComplete,
     this.onComplete,
   });
 
@@ -68,6 +70,7 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
       _prePhaseController!.addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _prePhaseCompleted = true;
+          widget.onSpreadComplete?.call();
           _mainController.forward();
         }
       });

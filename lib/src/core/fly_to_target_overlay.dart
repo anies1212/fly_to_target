@@ -36,6 +36,7 @@ class FlyToTargetOverlay {
     required FlyAnimationConfig config,
     required TickerProvider vsync,
     int index = 0,
+    VoidCallback? onSpreadComplete,
     VoidCallback? onComplete,
   }) async {
     if (_overlayState == null) {
@@ -68,6 +69,7 @@ class FlyToTargetOverlay {
           config: config,
           vsync: vsync,
           delay: config.staggerDelay * index,
+          onSpreadComplete: onSpreadComplete,
           onComplete: () {
             _removeEntry(id);
             onComplete?.call();
@@ -97,6 +99,7 @@ class FlyToTargetOverlay {
     required FlyTarget target,
     required FlyAnimationConfig config,
     required TickerProvider vsync,
+    void Function(int index)? onSpreadComplete,
     void Function(int index)? onItemComplete,
     VoidCallback? onAllComplete,
   }) async {
@@ -115,6 +118,9 @@ class FlyToTargetOverlay {
         config: config,
         vsync: vsync,
         index: i,
+        onSpreadComplete: () {
+          onSpreadComplete?.call(index);
+        },
         onComplete: () {
           onItemComplete?.call(index);
         },

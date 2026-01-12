@@ -1,3 +1,11 @@
+## 1.4.0
+
+### Added
+- `onSpreadComplete` callback for `flyAll` method
+  - Called each time an individual item completes its spread phase
+  - Receives the index of the item that finished spreading
+  - Useful for triggering haptics or effects when items spread out
+
 ## 1.3.0
 
 ### Added

@@ -1981,6 +1981,14 @@ class _StarTrailExampleState extends State<StarTrailExample>
           ),
         ],
       ),
+      onSpreadComplete: (index) {
+        debugPrint('🎯 Item $index spread complete!');
+        // 最初のアイテムがスプレッド完了した時にハプティクス
+        if (index == 0) {
+          HapticFeedback.mediumImpact();
+          debugPrint('📳 Haptic on spread complete (first item)');
+        }
+      },
       onItemComplete: (index) {
         debugPrint('✨ Item $index arrived!');
         HapticFeedback.lightImpact();
