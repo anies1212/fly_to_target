@@ -17,6 +17,14 @@ class FlyingItemAnimation extends StatefulWidget {
   final VoidCallback? onSpreadComplete;
   final VoidCallback? onComplete;
 
+  /// Progress threshold (0.0-1.0) at which to trigger onSpreadComplete.
+  /// Default is 1.0 (triggers at animation completion).
+  final double spreadTriggerAt;
+
+  /// Progress threshold (0.0-1.0) at which to trigger onComplete.
+  /// Default is 1.0 (triggers at animation completion).
+  final double flyTriggerAt;
+
   const FlyingItemAnimation({
     super.key,
     required this.item,
@@ -28,6 +36,8 @@ class FlyingItemAnimation extends StatefulWidget {
     this.delay = Duration.zero,
     this.onSpreadComplete,
     this.onComplete,
+    this.spreadTriggerAt = 1.0,
+    this.flyTriggerAt = 1.0,
   });
 
   @override
@@ -46,6 +56,8 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
 
   bool _started = false;
   bool _prePhaseCompleted = false;
+  bool _spreadCallbackTriggered = false;
+  bool _flyCallbackTriggered = false;
 
   SpreadPhaseConfig? get _spreadConfig {
     final prePhase = widget.config.prePhase;
@@ -67,10 +79,11 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
         parent: _prePhaseController!,
         curve: spreadConfig.curve,
       );
+      // Listen for progress-based callback trigger
+      _prePhaseController!.addListener(_checkSpreadProgress);
       _prePhaseController!.addStatusListener((status) {
         if (status == AnimationStatus.completed) {
           _prePhaseCompleted = true;
-          widget.onSpreadComplete?.call();
           _mainController.forward();
         }
       });
@@ -87,9 +100,15 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
       parent: _mainController,
       curve: widget.config.curve,
     );
+    // Listen for progress-based callback trigger
+    _mainController.addListener(_checkFlyProgress);
     _mainController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        widget.onComplete?.call();
+        // Ensure callback is called if not already triggered
+        if (!_flyCallbackTriggered) {
+          _flyCallbackTriggered = true;
+          widget.onComplete?.call();
+        }
       }
     });
 
@@ -109,6 +128,24 @@ class _FlyingItemAnimationState extends State<FlyingItemAnimation>
       } else {
         _mainController.forward();
       }
+    }
+  }
+
+  void _checkSpreadProgress() {
+    if (_spreadCallbackTriggered) return;
+    final progress = _prePhaseAnimation?.value ?? 0.0;
+    if (progress >= widget.spreadTriggerAt) {
+      _spreadCallbackTriggered = true;
+      widget.onSpreadComplete?.call();
+    }
+  }
+
+  void _checkFlyProgress() {
+    if (_flyCallbackTriggered) return;
+    final progress = _mainAnimation.value;
+    if (progress >= widget.flyTriggerAt) {
+      _flyCallbackTriggered = true;
+      widget.onComplete?.call();
     }
   }
 

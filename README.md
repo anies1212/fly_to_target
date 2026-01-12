@@ -286,6 +286,35 @@ SpreadPhaseConfig(
 )
 ```
 
+### Callbacks with Progress Triggers
+
+You can trigger callbacks at specific animation progress points (not just at completion):
+
+```dart
+await _controller.flyAll(
+  items: items,
+  target: FlyTargetFromKey(_targetKey),
+  config: config,
+  onSpreadComplete: (index) {
+    // Triggered when spread reaches 50%
+    HapticFeedback.lightImpact();
+  },
+  onItemComplete: (index) {
+    // Triggered when fly reaches 80%
+    HapticFeedback.lightImpact();
+  },
+  spreadTriggerAt: 0.5,  // Trigger at 50% of spread animation (default: 1.0)
+  flyTriggerAt: 0.8,     // Trigger at 80% of fly animation (default: 1.0)
+);
+```
+
+| Parameter | Description |
+|-----------|-------------|
+| `onSpreadComplete` | Callback for each item's spread phase |
+| `onItemComplete` | Callback for each item's fly phase |
+| `spreadTriggerAt` | Progress (0.0-1.0) at which to trigger spread callback |
+| `flyTriggerAt` | Progress (0.0-1.0) at which to trigger fly callback |
+
 ### Presets
 
 ```dart

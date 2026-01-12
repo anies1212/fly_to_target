@@ -38,6 +38,8 @@ class FlyToTargetOverlay {
     int index = 0,
     VoidCallback? onSpreadComplete,
     VoidCallback? onComplete,
+    double spreadTriggerAt = 1.0,
+    double flyTriggerAt = 1.0,
   }) async {
     if (_overlayState == null) {
       throw StateError(
@@ -77,6 +79,8 @@ class FlyToTargetOverlay {
               completer.complete();
             }
           },
+          spreadTriggerAt: spreadTriggerAt,
+          flyTriggerAt: flyTriggerAt,
         );
       },
     );
@@ -102,6 +106,8 @@ class FlyToTargetOverlay {
     void Function(int index)? onSpreadComplete,
     void Function(int index)? onItemComplete,
     VoidCallback? onAllComplete,
+    double spreadTriggerAt = 1.0,
+    double flyTriggerAt = 1.0,
   }) async {
     if (items.isEmpty) {
       onAllComplete?.call();
@@ -124,6 +130,8 @@ class FlyToTargetOverlay {
         onComplete: () {
           onItemComplete?.call(index);
         },
+        spreadTriggerAt: spreadTriggerAt,
+        flyTriggerAt: flyTriggerAt,
       );
       futures.add(future);
     }

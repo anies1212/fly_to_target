@@ -1892,6 +1892,8 @@ class _StarTrailExampleState extends State<StarTrailExample>
   double _startDistance = 20.0;
   double _spreadWidth = 30.0;
   int _staggerDelayMs = 80;
+  double _spreadTriggerAt = 1.0;
+  double _flyTriggerAt = 1.0;
 
   @override
   void didChangeDependencies() {
@@ -1982,17 +1984,15 @@ class _StarTrailExampleState extends State<StarTrailExample>
         ],
       ),
       onSpreadComplete: (index) {
-        debugPrint('🎯 Item $index spread complete!');
-        // 最初のアイテムがスプレッド完了した時にハプティクス
-        if (index == 0) {
-          HapticFeedback.mediumImpact();
-          debugPrint('📳 Haptic on spread complete (first item)');
-        }
+        debugPrint('🎯 Item $index spread triggered at $_spreadTriggerAt!');
+        HapticFeedback.mediumImpact();
       },
       onItemComplete: (index) {
-        debugPrint('✨ Item $index arrived!');
+        debugPrint('✨ Item $index fly triggered at $_flyTriggerAt!');
         HapticFeedback.lightImpact();
       },
+      spreadTriggerAt: _spreadTriggerAt,
+      flyTriggerAt: _flyTriggerAt,
     );
 
     setState(() {
@@ -2088,6 +2088,32 @@ class _StarTrailExampleState extends State<StarTrailExample>
               divisions: 20,
               label: '${_staggerDelayMs}ms',
               onChanged: (v) => setState(() => _staggerDelayMs = v.toInt()),
+            ),
+            const Divider(height: 24),
+            const Text(
+              'Callback Trigger Settings',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            Text(
+                'Spread Trigger At: ${(_spreadTriggerAt * 100).toStringAsFixed(0)}%'),
+            Slider(
+              value: _spreadTriggerAt,
+              min: 0.1,
+              max: 1.0,
+              divisions: 9,
+              label: '${(_spreadTriggerAt * 100).toStringAsFixed(0)}%',
+              onChanged: (v) => setState(() => _spreadTriggerAt = v),
+            ),
+            Text(
+                'Fly Trigger At: ${(_flyTriggerAt * 100).toStringAsFixed(0)}%'),
+            Slider(
+              value: _flyTriggerAt,
+              min: 0.1,
+              max: 1.0,
+              divisions: 9,
+              label: '${(_flyTriggerAt * 100).toStringAsFixed(0)}%',
+              onChanged: (v) => setState(() => _flyTriggerAt = v),
             ),
             const SizedBox(height: 48),
             Center(

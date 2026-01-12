@@ -47,14 +47,22 @@ class FlyToTargetController {
   /// [onSpreadComplete] is called each time an individual item completes its spread phase.
   /// The callback receives the index of the item that finished spreading.
   ///
+  /// [spreadTriggerAt] is the progress (0.0-1.0) at which to trigger [onSpreadComplete].
+  /// Default is 1.0 (triggers at spread animation completion).
+  ///
   /// [onItemComplete] is called each time an individual item reaches its target.
   /// The callback receives the index of the completed item.
+  ///
+  /// [flyTriggerAt] is the progress (0.0-1.0) at which to trigger [onItemComplete].
+  /// Default is 1.0 (triggers at fly animation completion).
   Future<void> flyAll({
     required List<FlyItem> items,
     required FlyTarget target,
     FlyAnimationConfig? config,
     void Function(int index)? onSpreadComplete,
     void Function(int index)? onItemComplete,
+    double spreadTriggerAt = 1.0,
+    double flyTriggerAt = 1.0,
   }) async {
     _ensureAttached();
 
@@ -67,6 +75,8 @@ class FlyToTargetController {
       vsync: _vsync!,
       onSpreadComplete: onSpreadComplete,
       onItemComplete: onItemComplete,
+      spreadTriggerAt: spreadTriggerAt,
+      flyTriggerAt: flyTriggerAt,
       onAllComplete: () {
         for (final item in items) {
           _completionController.add(FlyCompletionEvent(itemId: item.id));

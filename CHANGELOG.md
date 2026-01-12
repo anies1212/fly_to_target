@@ -1,3 +1,12 @@
+## 1.5.0
+
+### Added
+- Progress-based callback triggers for `flyAll` method
+  - `spreadTriggerAt` - Progress (0.0-1.0) at which to trigger spread callback
+  - `flyTriggerAt` - Progress (0.0-1.0) at which to trigger fly callback
+  - Allows triggering haptics/effects before animation completes
+- Updated example with sliders to test trigger points
+
 ## 1.4.0
 
 ### Added
