@@ -1,3 +1,10 @@
+## 1.6.1
+
+### Added
+- Group Animation example with interactive sliders
+  - Adjustable item count, group size, and group delay
+  - Visual demonstration of group animation behavior
+
 ## 1.6.0
 
 ### Added

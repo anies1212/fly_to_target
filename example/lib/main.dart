@@ -148,6 +148,14 @@ class DemoPage extends StatelessWidget {
               MaterialPageRoute(builder: (_) => const StarTrailExample()),
             ),
           ),
+          _DemoTile(
+            title: 'Group Animation',
+            subtitle: 'Items appear in groups (pairs, etc)',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const GroupAnimationExample()),
+            ),
+          ),
         ],
       ),
     );
@@ -2157,6 +2165,267 @@ class _StarTrailExampleState extends State<StarTrailExample>
         backgroundColor: Colors.amber,
         icon: const Icon(Icons.auto_awesome),
         label: const Text('Fly with Stars'),
+      ),
+    );
+  }
+}
+
+// ============================================================================
+// Group Animation Example
+// ============================================================================
+
+class GroupAnimationExample extends StatefulWidget {
+  const GroupAnimationExample({super.key});
+
+  @override
+  State<GroupAnimationExample> createState() => _GroupAnimationExampleState();
+}
+
+class _GroupAnimationExampleState extends State<GroupAnimationExample>
+    with TickerProviderStateMixin {
+  final _controller = FlyToTargetController();
+  final _targetKey = GlobalKey();
+
+  int _collectedCount = 0;
+  int _itemCount = 16;
+  int _groupSize = 2;
+  int _groupDelayMs = 100;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_controller.isAttached) {
+      _controller.attach(context, this);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> _flyWithGroups() async {
+    final screenSize = MediaQuery.of(context).size;
+    final gatherPoint = Offset(
+      screenSize.width / 2,
+      screenSize.height * 0.6,
+    );
+
+    // Build items in a circular pattern
+    final items = List.generate(_itemCount, (i) {
+      final angle = (i / _itemCount) * 2 * pi - pi / 2;
+      final radius = 100.0;
+      final spreadPosition = Offset(
+        gatherPoint.dx + cos(angle) * radius,
+        gatherPoint.dy + sin(angle) * radius,
+      );
+
+      return FlyItem.fromOffset(
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Colors.primaries[i % Colors.primaries.length],
+                Colors.primaries[(i + 1) % Colors.primaries.length],
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.white, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.primaries[i % Colors.primaries.length]
+                    .withValues(alpha: 0.5),
+                blurRadius: 8,
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              '${i + 1}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+        offset: spreadPosition,
+        size: const Size(40, 40),
+      );
+    });
+
+    await _controller.flyAll(
+      items: items,
+      target: FlyTargetFromKey(_targetKey),
+      config: FlyAnimationConfig.spreadAndFly(
+        gatherPoint: gatherPoint,
+        spreadDuration: const Duration(milliseconds: 400),
+        spreadCurve: Curves.easeOutBack,
+        flyDuration: const Duration(milliseconds: 800),
+        flyCurve: Curves.easeIn,
+        groupSize: _groupSize,
+        groupStaggerDelay: Duration(milliseconds: _groupDelayMs),
+        effects: const FlyEffects(
+          scale: ScaleEffect(endScale: 0.5, startAt: 0.5),
+        ),
+      ),
+      onSpreadComplete: (index) {
+        HapticFeedback.lightImpact();
+      },
+      onItemComplete: (index) {
+        HapticFeedback.lightImpact();
+      },
+    );
+
+    setState(() {
+      _collectedCount += items.length;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Group Animation'),
+        actions: [
+          Container(
+            key: _targetKey,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const Icon(Icons.catching_pokemon, color: Colors.amber),
+                const SizedBox(width: 4),
+                Text(
+                  '$_collectedCount',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Group Settings',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Text('Item Count: $_itemCount'),
+            Slider(
+              value: _itemCount.toDouble(),
+              min: 4,
+              max: 24,
+              divisions: 20,
+              label: '$_itemCount',
+              onChanged: (v) => setState(() => _itemCount = v.toInt()),
+            ),
+            Text('Group Size: $_groupSize'),
+            Slider(
+              value: _groupSize.toDouble(),
+              min: 1,
+              max: 8,
+              divisions: 7,
+              label: '$_groupSize',
+              onChanged: (v) => setState(() => _groupSize = v.toInt()),
+            ),
+            Text('Group Delay: ${_groupDelayMs}ms'),
+            Slider(
+              value: _groupDelayMs.toDouble(),
+              min: 0,
+              max: 300,
+              divisions: 30,
+              label: '${_groupDelayMs}ms',
+              onChanged: (v) => setState(() => _groupDelayMs = v.toInt()),
+            ),
+            const SizedBox(height: 24),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.blue.withValues(alpha: 0.3),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'How it works:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '• groupSize: $_groupSize items appear at the same time',
+                  ),
+                  Text(
+                    '• groupStaggerDelay: ${_groupDelayMs}ms between each group',
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'With $_itemCount items and groupSize $_groupSize:\n'
+                    '${(_itemCount / _groupSize).ceil()} groups will animate',
+                    style: const TextStyle(color: Colors.blue),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 48),
+            Center(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.purple.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.purple.withValues(alpha: 0.3),
+                    width: 2,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    const Icon(Icons.group_work,
+                        size: 48, color: Colors.purple),
+                    const SizedBox(height: 8),
+                    Text(
+                      '$_itemCount Items',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'in groups of $_groupSize',
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _flyWithGroups,
+        backgroundColor: Colors.purple,
+        icon: const Icon(Icons.play_arrow),
+        label: const Text('Fly in Groups'),
       ),
     );
   }
