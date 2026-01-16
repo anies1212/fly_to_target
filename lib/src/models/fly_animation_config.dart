@@ -20,7 +20,16 @@ class FlyAnimationConfig {
   final Curve curve;
 
   /// Delay between each item start (stagger effect)
+  /// When [groupSize] > 1, this is the delay between items within a group
   final Duration staggerDelay;
+
+  /// Number of items per group (default: 1 = no grouping)
+  /// When > 1, items are grouped and each group starts together
+  final int groupSize;
+
+  /// Delay between groups (only used when [groupSize] > 1)
+  /// If null, uses [staggerDelay] as the group delay
+  final Duration? groupStaggerDelay;
 
   /// Path configuration
   final PathConfig pathConfig;
@@ -36,6 +45,8 @@ class FlyAnimationConfig {
     this.duration = const Duration(milliseconds: 800),
     this.curve = Curves.easeInOut,
     this.staggerDelay = const Duration(milliseconds: 50),
+    this.groupSize = 1,
+    this.groupStaggerDelay,
     this.pathConfig = const LinearPathConfig(),
     this.effects = const FlyEffects(),
     this.decorations = const [],
@@ -138,6 +149,8 @@ class FlyAnimationConfig {
     Duration flyDuration = const Duration(milliseconds: 800),
     Curve flyCurve = Curves.easeIn,
     Duration staggerDelay = const Duration(milliseconds: 50),
+    int groupSize = 1,
+    Duration? groupStaggerDelay,
     PathConfig pathConfig = const LinearPathConfig(),
     FlyEffects effects = const FlyEffects(),
     List<DecorationConfig> decorations = const [],
@@ -151,6 +164,8 @@ class FlyAnimationConfig {
       duration: flyDuration,
       curve: flyCurve,
       staggerDelay: staggerDelay,
+      groupSize: groupSize,
+      groupStaggerDelay: groupStaggerDelay,
       pathConfig: pathConfig,
       effects: effects,
       decorations: decorations,
@@ -257,6 +272,8 @@ class FlyAnimationConfig {
     Duration? duration,
     Curve? curve,
     Duration? staggerDelay,
+    int? groupSize,
+    Duration? groupStaggerDelay,
     PathConfig? pathConfig,
     FlyEffects? effects,
     List<DecorationConfig>? decorations,
@@ -266,9 +283,21 @@ class FlyAnimationConfig {
       duration: duration ?? this.duration,
       curve: curve ?? this.curve,
       staggerDelay: staggerDelay ?? this.staggerDelay,
+      groupSize: groupSize ?? this.groupSize,
+      groupStaggerDelay: groupStaggerDelay ?? this.groupStaggerDelay,
       pathConfig: pathConfig ?? this.pathConfig,
       effects: effects ?? this.effects,
       decorations: decorations ?? this.decorations,
     );
+  }
+
+  /// Calculate delay for a specific item index
+  Duration calculateDelay(int index) {
+    if (groupSize <= 1) {
+      return staggerDelay * index;
+    }
+    final groupIndex = index ~/ groupSize;
+    final effectiveGroupDelay = groupStaggerDelay ?? staggerDelay;
+    return effectiveGroupDelay * groupIndex;
   }
 }

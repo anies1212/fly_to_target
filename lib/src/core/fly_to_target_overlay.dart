@@ -70,7 +70,7 @@ class FlyToTargetOverlay {
           itemSize: itemSize ?? const Size(40, 40),
           config: config,
           vsync: vsync,
-          delay: config.staggerDelay * index,
+          delay: config.calculateDelay(index),
           onSpreadComplete: onSpreadComplete,
           onComplete: () {
             _removeEntry(id);

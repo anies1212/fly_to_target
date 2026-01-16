@@ -1,6 +1,6 @@
 name: fly_to_target
 description: "A Flutter package for animating multiple widgets flying to target positions simultaneously with customizable paths and effects."
-version: 1.5.0
+version: 1.6.0
 homepage: https://github.com/anies1212/fly_to_target
 repository: https://github.com/anies1212/fly_to_target
 issue_tracker: https://github.com/anies1212/fly_to_target/issues

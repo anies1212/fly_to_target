@@ -1,3 +1,13 @@
+## 1.6.0
+
+### Added
+- Group animation support for `FlyAnimationConfig`
+  - `groupSize` - Number of items per group (default: 1)
+  - `groupStaggerDelay` - Delay between groups
+  - `calculateDelay(index)` - Helper method to calculate delay for each item
+- Items within the same group start simultaneously
+- Example: `groupSize: 2, groupStaggerDelay: 100ms` makes pairs of items appear together
+
 ## 1.5.0
 
 ### Added
